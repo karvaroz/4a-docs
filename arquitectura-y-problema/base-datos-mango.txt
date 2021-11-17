@@ -1,0 +1,5 @@
+superuser
+pass123
+
+mongodb+srv://superadmin:pass123@accountdb.essoi.mongodb.net/AccountDB?retryWrites=true&w=majority
+mongodb+srv://superadmin:pass123@accountdb.essoi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
