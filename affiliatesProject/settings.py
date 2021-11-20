@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'affiliatesProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dc28km0qr0gnbi',
+        'USER': 'ferwqebvufvjnc',
+        'PASSWORD': 'f2969c3020681ebc3c3cc2e611b260824cba7ab6803c34618ef85f8c9c8e6821',
+        'HOST': 'ec2-54-146-82-179.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -125,3 +129,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import django_heroku
+django_heroku.settings(locals())
