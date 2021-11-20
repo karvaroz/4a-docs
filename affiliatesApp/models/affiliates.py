@@ -1,7 +1,4 @@
 from django.db import models
-from phonenumber_field.modelfields import PhoneNumberField
-
-
 class Affiliates(models.Model):
     DOCUMENT_TYPE_CHOICES = [
         ('CC', 'CÉDULA CIUDADANÍA'),
