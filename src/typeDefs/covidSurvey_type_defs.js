@@ -22,3 +22,5 @@ const transactionTypeDefs = gql`
 `;
 
 module.exports = transactionTypeDefs;
+
+//Necesita modificacion

@@ -1,24 +1,27 @@
 const { RESTDataSource } = require("apollo-datasource-rest");
 const serverConfig = require("../server");
-class AccountAPI extends RESTDataSource {
+class AffiliatesAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = serverConfig.account_api_url;
+    this.baseURL = serverConfig.affiliates_api_url;
   }
-  async createAccount(account) {
-    account = new Object(JSON.parse(JSON.stringify(account)));
-    return await this.post("/accounts", account);
+  async createAffiliate(affiliate) {
+    affiliate = new Object(JSON.parse(JSON.stringify(affiliate)));
+    return await this.post("/affiliates", affiliate);
   }
-  async accountByUsername(username) {
-    return await this.get(`/accounts/${username}`);
+  async affiliatesByDocument_number(document_number) {
+    return await this.get(`/affiliates/${document_number}`);
   }
-  async createTransaction(transaction) {
-    transaction = new Object(JSON.parse(JSON.stringify(transaction)));
-    return await this.post("/transactions", transaction);
+  async createSurvay(covidSurvey) {
+    covidSurvey = new Object(JSON.parse(JSON.stringify(covidSurvey)));
+    return await this.post("/surveys", covidSurvey);
   }
-  async transactionByUsername(username) {
-    return await this.get(`/transactions/${username}`);
+  async surveyByDocument_number(document_number) {
+    return await this.get(`/surveys/${document_number}`);
   }
 }
 
-module.exports = AccountAPI;
+module.exports = AffiliatesAPI;
+
+//revisar cuando se tenga el microservicio de encuentas covid
+//si necesita alguna modificación

@@ -3,3 +3,5 @@ module.exports = {
   affiliates_api_url: "https://affiliates-ms-be.herokuapp.com/",
   covidSurvey_api_url: "",
 };
+
+//agregar url tercer microservicio
