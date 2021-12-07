@@ -12,12 +12,12 @@ class AffiliatesAPI extends RESTDataSource {
   async affiliatesByDocument_number(document_number) {
     return await this.get(`/affiliates/${document_number}`);
   }
-  async createSurvay(covidSurvey) {
+  async createSurvey(covidSurvey) {
     covidSurvey = new Object(JSON.parse(JSON.stringify(covidSurvey)));
     return await this.post("/surveys", covidSurvey);
   }
-  async surveyByDocument_number(document_number) {
-    return await this.get(`/surveys/${document_number}`);
+  async surveysByDocument(document) {
+    return await this.get(`/surveys/${document}`);
   }
 }
 
@@ -25,3 +25,4 @@ module.exports = AffiliatesAPI;
 
 //revisar cuando se tenga el microservicio de encuentas covid
 //si necesita alguna modificación
+//Según leí, esta bien todo por esta parte, veo al parecer que las transacciones se hacen desde aquí

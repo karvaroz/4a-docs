@@ -1,28 +1,28 @@
-const transactionResolver = {
+const covidSurveyResolver = {
   Query: {
-    transactionByUsername: async (
+    surveysByDocument: async (
       _,
-      { username },
+      { username,document },
       { dataSources, userIdToken }
     ) => {
       usernameToken = (await dataSources.authAPI.getUser(userIdToken)).username;
       if (username == usernameToken)
-        return dataSources.accountAPI.transactionByUsername(username);
+        return dataSources.accountAPI.surveysByDocument(document);
       else return null;
     },
   },
   Mutation: {
-    createTransaction: async (
+    createSurvey: async (
       _,
-      { transaction },
+      { survey },
       { dataSources, userIdToken }
     ) => {
       usernameToken = (await dataSources.authAPI.getUser(userIdToken)).username;
       if (transaction.usernameOrigin == usernameToken)
-        return dataSources.accountAPI.createTransaction(transaction);
+        return dataSources.accountAPI.createTransaction(survey);
       else return null;
     },
   },
 };
 
-module.exports = transactionResolver;
+module.exports = covidSurveyResolver;

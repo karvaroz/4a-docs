@@ -10,3 +10,4 @@ const schemasArrays = [authTypeDefs, affiliatesTypeDefs, covidSurveyTypeDefs];
 module.exports = schemasArrays;
 
 //Revisar
+// Según lo que veo en la guía esta bien :D

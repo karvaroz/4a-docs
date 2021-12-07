@@ -1,26 +1,32 @@
 const { gql } = require("apollo-server");
 
-const transactionTypeDefs = gql`
-  type Transaction {
+const surveyTypeDefs = gql`
+  type Survey {
     id: String!
-    usernameOrigin: String!
-    usernameDestiny: String!
-    value: Int!
-    date: String!
+    document: Int!
+    question_one: Boolean!,
+    question_two: Boolean!,
+    question_three: Boolean!,
+    question_four: Boolean!,
+    question_five: Boolean!
   }
-  input TransactionInput {
-    usernameOrigin: String!
-    usernameDestiny: String!
-    value: Int!
+  input SurveyInput {
+    document: Int!,
+    question_one: Boolean!,
+    question_two: Boolean!,
+    question_three: Boolean!,
+    question_four: Boolean!,
+    question_five: Boolean!
   }
   extend type Query {
-    transactionByUsername(username: String!): [Transaction]
+    surveysByDocument(document: Int!): [Survey]
   }
   extend type Mutation {
-    createTransaction(transaction: TransactionInput!): Transaction
+    createSurvey(survey: SurveyInput!): Survey
   }
 `;
 
-module.exports = transactionTypeDefs;
+module.exports = surveyTypeDefs;
 
 //Necesita modificacion
+// Listop :D

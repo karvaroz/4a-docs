@@ -5,8 +5,7 @@ const affiliatesTypeDefs = gql`
     id: Int!
     name: String!
     lastname: String!
-    document
-    document_number: String!
+    document: String!
     email: String!   
     phone: String!
     city: String!
@@ -15,7 +14,7 @@ const affiliatesTypeDefs = gql`
     updated: String!
   }
   extend type Query {
-    affiliatesByDocument_number(document_number: String!): Affiliates
+    affiliatesByDocument(document: String!): Affiliates
   }
 `;
 

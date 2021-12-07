@@ -1,15 +1,15 @@
-const accountResolver = {
+const affiliateResolver = {
     Query: {
-    accountByUsername: async(_, { username }, { dataSources, userIdToken }) => {
-    usernameToken = (await dataSources.authAPI.getUser(userIdToken)).username
+    affiliatesByDocument: async(_, { document }, { dataSources, userIdToken }) => {
+    documentToken = (await dataSources.authAPI.getUser(userIdToken)).document
     if (username == usernameToken)
-    return await dataSources.accountAPI.accountByUsername(username)
+        return await dataSources.accountAPI.affiliatesByDocument(document)
     else
-    return null
+        return null
     },
     },
     Mutation: {}
 };
-module.exports = accountResolver;
+module.exports = affiliateResolver;
 
 //Necesita revision
