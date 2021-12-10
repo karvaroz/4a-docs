@@ -135,6 +135,7 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 export default {
   name: "profile",
+
   data: () => {
     return {
       username: localStorage.getItem("username") || "none",
@@ -156,6 +157,7 @@ export default {
       showPasswordUpdate: false,
     };
   },
+
   methods: {
     getUserDataProfile: async function () {
       if (
@@ -165,9 +167,12 @@ export default {
         this.logOut;
         return;
       }
+
       await this.verifyToken();
+
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
+
       axios
         .get(`https://gestify-be.herokuapp.com/user/${userId}`, {
           headers: { Authorization: `Bearer ${userToken}` },
@@ -180,10 +185,12 @@ export default {
         })
         .catch(() => this.logOut);
     },
+
     logOut: function () {
       localStorage.clear();
       this.$router.push({ name: "logIn" });
     },
+
     verifyToken: function () {
       return axios
         .post(
@@ -201,16 +208,18 @@ export default {
     created: async function () {
       this.getUserData;
     },
+
     verifyAuth: function () {
       this.is_auth = localStorage.getItem("isAuth");
       if (this.is_auth == false) this.$router.push({ name: "logIn" });
       else this.$router.push("/user/profile");
     },
+
     updateUser: function () {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
       axios
-        .put(`https://eps-authms.herokuapp.com/user/${userId}`, this.user, {
+        .put(`https://gestify-be.herokuapp.com/user/${userId}`, this.user, {
           headers: { Authorization: `Bearer ${userToken}` },
         })
         .then((result) => {
@@ -224,6 +233,7 @@ export default {
           alert("Falló el registro");
         });
     },
+
     updatePassword: function () {
       if (this.showPasswordUpdate == false) {
         this.showPasswordUpdate = true;
@@ -234,6 +244,7 @@ export default {
         this.profileInfo = false;
       }
     },
+
     setNewPassword: function () {
       if (this.newPassword != this.confirmPassword) {
         alert(
@@ -247,6 +258,7 @@ export default {
         this.$router.push("logIn");
       }
     },
+
     showForm: function () {
       if (this.updateInfo == false) {
         this.updateInfo = true;
