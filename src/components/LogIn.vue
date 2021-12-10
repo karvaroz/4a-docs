@@ -1,32 +1,51 @@
 <template>
-  <router-link to="/"> VOLVER </router-link>
-  <h1>Inicio de sesión</h1>
-
-  <form v-on:submit.prevent="sendToDashboard">
-    <div>
-      <label for="username">Nombre de usuario</label>
-      <input
-        type="username"
-        name="username"
-        id="username"
-        v-model="user.username"
-      />
-
-      <label for="password">Contraseña</label>
-      <input
-        type="password"
-        name="password"
-        id="pass"
-        v-model="user.password"
-      />
+  <div class="center-content-column">
+    <div class="login-form-container">
+      <div class="bg-login"></div>
+      <div class="white-container">
+        <div class="header-back-button">
+          <router-link to="/" class="header-back-button__link">
+            <ges-icon icon="chevron-left" />
+            VOLVER
+          </router-link>
+          <h1 class="form-title form-title--login">Inicio de sesión</h1>
+        </div>
+        <form class="login-form" v-on:submit.prevent="sendToDashboard">
+          <div class="input-container">
+            <label for="username" class="input-container__label"
+              >Nombre de usuario</label
+            >
+            <input
+              type="username"
+              class="input-container__input"
+              name="username"
+              id="username"
+              v-model="user.username"
+            />
+          </div>
+          <div class="input-container">
+            <label for="password" class="input-container__label"
+              >Contraseña</label
+            >
+            <input
+              type="password"
+              class="input-container__input"
+              name="password"
+              id="pass"
+              v-model="user.password"
+            />
+          </div>
+          <button type="submit" class="primary-btn">Iniciar sesión</button>
+        </form>
+        <div class="bottom-actions">
+          <p>
+          ¿Aún no eres usuario?
+          <router-link to="/user/signup" class="bottom-actions__link">Regístrate</router-link>
+          </p>
+        </div>
+      </div>
     </div>
-    <button type="submit">Iniciar sesión</button>
-  </form>
-
-  <p>
-    ¿Aún no eres usuario?
-    <router-link to="/user/signup">Regístrate</router-link>
-  </p>
+  </div>
 </template>
 
 <script>
@@ -54,7 +73,7 @@ export default {
             token_refresh: result.data.refresh,
           };
           this.$emit("logInSuccess", dataLogIn);
-          this.$router.push({ name: "mainLayout" });
+          this.$router.push({ name: "mainLayout", });
         })
         .catch((error) => {
           if (error.response.status == "401")
