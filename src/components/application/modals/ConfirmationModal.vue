@@ -27,7 +27,7 @@
             <button
               type="submit"
               class="primary-btn primary-btn--margin"
-              @click="deleteItem(idItem)"
+              @click="deleteElement(idElement)"
             >
               Sí, eliminar
             </button>
@@ -46,17 +46,17 @@ export default {
   name: "ConfirmationModal",
   data: function () {
     return {
-      idDeleteItem: "",
+      idDeleteElement: "",
     };
   },
-  props: ["idItem"],
+  props: ["idElement"],
   methods: {
     close() {
       this.$emit("close");
     },
-    deleteItem() {
-      this.idDeleteItem = this.idItem;
-      this.$emit("delete-item", this.idDeleteItem);
+    deleteElement() {
+      this.idDeleteElement = this.idElement;
+      this.$emit("delete-element", this.idDeleteElement);
       this.close()
     },
   },

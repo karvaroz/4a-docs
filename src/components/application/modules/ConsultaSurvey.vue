@@ -1,45 +1,35 @@
 <template>
   <div>
-    <h1>Consulta de proveedores</h1>
-    <!-- <form action="" class="search-form">
-      <div class="input-container input-container--search">
-        <label for="search" class="input-container__label">Buscar</label>
-        <input
-          type="text"
-          class="input-container__input"
-          name="search"
-          id="search"
-          required
-        />
-        <small>Puedes buscar por código o nombre del producto</small>
-      </div>
-    </form> -->
+    <h1>Consulta de encuestas</h1>
     <table class="scroll-table">
       <table class="table">
         <thead>
           <tr class="table__header">
-            <th class="table__header-item">Nombre</th>
-            <th class="table__header-item">Contacto</th>
-            <th class="table__header-item">Correo electrónico</th>
-            <th class="table__header-item">Acciones</th>
+            <th class="table__header-item">Id</th>
+            <th class="table__header-item">N° Documento</th>
+            <th class="table__header-item">Pregunta N° 1</th>
+            <th class="table__header-item">Pregunta N° 2</th>
+            <th class="table__header-item">Pregunta N° 3</th>
+            <th class="table__header-item">Pregunta N° 4</th>
+            <th class="table__header-item">Pregunta N° 5</th>
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(provider, index) in userProviders" :key="index">
-            <td class="table__body-item">{{ provider.p_name }}</td>
-            <td class="table__body-item">{{ provider.p_telephone }}</td>
-            <td class="table__body-item">{{ provider.p_email }}</td>
+          <tr v-for="(survey, index) in surveys" :key="index">
+            <td class="table__body-item">{{ survey.id }}</td>
+            <td class="table__body-item">{{ survey.document }}</td>
+            <td class="table__body-item">{{ survey.question_one }}</td>
+            <td class="table__body-item">{{ survey.question_two }}</td>
+            <td class="table__body-item">{{ survey.question_three }}</td>
+            <td class="table__body-item">{{ survey.question_four }}</td>
+            <td class="table__body-item">{{ survey.question_five }}</td>
             <td class="table__body-item">
-              <button class="edit-btn" @click="openEditProviderModal(index)">
+              <button class="edit-btn" @click="openEditSurveyModal(index)">
                 <ges-icon icon="edit" size="lg"></ges-icon>
               </button>
-              <!-- <button
-                type="button"
-                class="close-btn"
-                @click="deleteProvider(provider.p_name)"
-              >
+              <button type="button" class="close-btn">
                 <ges-icon size="lg" icon="trash-alt"></ges-icon>
-              </button> -->
+              </button>
               <button
                 type="button"
                 class="close-btn"
@@ -52,102 +42,106 @@
         </tbody>
       </table>
     </table>
-    <ModalEditProvider
+    <ModalEditSurvey
       v-show="isModalVisible"
       @close="closeModal"
-      v-bind="editProvider"
+      v-bind="editSurvey"
     >
-    </ModalEditProvider>
+    </ModalEditSurvey>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
-      @delete-item="deleteProvider"
-      :idItem="deleteProviderId"
+      @delete-element="deleteSurvey"
+      :idElement="deleteSurveyId"
     ></ConfirmationModal>
   </div>
 </template>
 <script>
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import ModalEditProvider from "../modals/ModalEditProvider.vue";
+import ModalEditSurvey from "../modals/ModalEditSurvey.vue";
 import ConfirmationModal from "../modals/ConfirmationModal.vue";
 export default {
-  name: "consultaProveedores",
+  name: "consultaEncuestas",
   components: {
-    ModalEditProvider,
+    ModalEditSurvey,
     ConfirmationModal,
   },
   data: function () {
     return {
-      provider: {
-        p_name: "",
-        p_telephone: "",
-        p_email: "",
+      survey: {
+        id: "",
+        document: "",
+        question_one: "",
+        question_two: "",
+        question_three: "",
+        question_four: "",
+        question_five: "",
       },
-      userProviders: [],
-      editProvider: {},
+      surveys: [],
+      editSurvey: {},
       isModalVisible: false,
       isConfirmationModalVisible: false,
-      deleteProviderId: {},
+      deleteSurveyId: {},
     };
   },
   methods: {
-    getUserProviders: function () {
+    getSurveys: function () {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
       axios
-        .get(`https://gestify-be.herokuapp.com/user/${userId}/providers`, {
+        .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
           headers: { Authorization: `Bearer ${userToken}` },
         })
         .then((result) => {
-          this.userProviders = result.data;
+          this.surveys = result.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    openEditProviderModal(providerId) {
+    openEditSurveyModal(surveyId) {
       this.isModalVisible = true;
-      this.editProvider = this.userProviders[providerId];
+      this.editSurvey = this.surveys[surveyId];
     },
     closeModal() {
       this.isModalVisible = false;
-      this.getUserProviders()
+      this.getSurveys();
     },
 
     closeConfirmationModal() {
       this.isConfirmationModalVisible = false;
     },
 
-    openConfirmationModal(providerId) {
+    openConfirmationModal(surveyId) {
       this.isConfirmationModalVisible = true;
-      this.deleteProviderId = providerId;
+      this.deleteSurveyId = surveyId;
     },
 
-    deleteProvider(providerCodeDelete) {
+    deleteSurvey(surveyIdDelete) {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
-      let providerId = this.userProviders[providerCodeDelete].p_name;
+      let surveyId = this.surveys[surveyIdDelete].document;
       axios
         .delete(
-          `https://gestify-be.herokuapp.com/user/${userId}/providers/${providerId}`,
+          `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
           {
             headers: { Authorization: `Bearer ${userToken}` },
           }
         )
         .then((result) => {
-          alert("Proveedor eliminado con éxito");
-          this.getUserProviders();
+          alert("Encuesta eliminada con éxito");
+          this.getSurveys();
           this.closeModal();
         })
         .catch((error) => {
           console.log(error);
-          alert("Falló eliminación de proveedor");
+          alert("Falló eliminación de encuesta");
         });
     },
   },
   beforeMount() {
-    this.getUserProviders();
+    this.getSurveys();
   },
 };
 </script>

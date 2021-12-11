@@ -1,48 +1,111 @@
 <template>
   <div>
-    <h1 class="form-title">Registro Proveedores</h1>
+    <h1 class="form-title">Registro Encuestas</h1>
     <form class="global-form-container" v-on:submit.prevent="createProvider">
       <div class="register-form">
         <div class="input-container">
-          <label for="name" class="input-container__label">Nombre</label>
+          <label for="id" class="input-container__label">ID</label>
           <input
             type="text"
             class="input-container__input"
-            name="name"
-            id="name"
+            name="id"
+            id="id"
             required
-            v-model="provider.p_name"
+            v-model="id"
           />
         </div>
         <div class="input-container">
-          <label for="contactNumber" class="input-container__label"
-            >Número de contacto</label
-          >
+          <label for="document" class="input-container__label">Documento</label>
           <input
-            type="text"
+            type="number"
             class="input-container__input"
-            name="contactNumber"
-            id="contactNumber"
+            name="document"
+            id="document"
             required
-            v-model="provider.p_telephone"
+            v-model="document"
           />
         </div>
         <div class="input-container">
-          <label for="email" class="input-container__label"
-            >Correo electrónico</label
+          <label for="question_one" class="input-contailer__label"
+            >¿Ha sufrido de covid-19?</label
           >
-          <input
-            type="email"
+          <select
             class="input-container__input"
-            name="email"
-            id="email"
+            name="question_one"
+            id="question_one"
             required
-            v-model="provider.p_email"
-          />
+            v-model="question_one"
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-container">
+          <label for="question_two" class="input-contailer__label"
+            >¿Ha estado en contacto con personas que han sufrido de
+            covid-19?</label
+          >
+          <select
+            class="input-container__input"
+            name="question_two"
+            id="question_two"
+            required
+            v-model="question_two"
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-container">
+          <label for="question_three" class="input-contailer__label"
+            >¿Ha tenido temperatura mayor a 37° grados?</label
+          >
+          <select
+            class="input-container__input"
+            name="question_three"
+            id="question_three"
+            required
+            v-model="question_three"
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-container">
+          <label for="question_four" class="input-contailer__label"
+            >¿Ha tenido dificultad para respirar durante la última
+            semana?</label
+          >
+          <select
+            class="input-container__input"
+            name="question_four"
+            id="question_four"
+            required
+            v-model="question_four"
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="input-container">
+          <label for="question_five" class="input-contailer__label"
+            >¿Se ha sentido más cansado que de costumbre durante la última
+            semana?</label
+          >
+          <select
+            class="input-container__input"
+            name="question_five"
+            id="question_five"
+            required
+            v-model="question_five"
+          >
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
         </div>
       </div>
       <button class="primary-btn primary-btn--margin" type="submit">
-        Registrar proveedor
+        Registrar encuesta
       </button>
     </form>
   </div>
@@ -51,38 +114,52 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 export default {
-  name: "registroProveedores",
+  name: "registroEncuestas",
   data: function () {
     return {
-      provider: {
-        p_name: "",
-        p_telephone: "",
-        p_email: "",
+      survey: {
+        id: "",
+        document: "",
+        question_one: "",
+        question_two: "",
+        question_three: "",
+        question_four: "",
+        question_five: "",
       },
     };
   },
   methods: {
-    createProvider: function () {
+    createSurvey: function () {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
 
-      axios.post(`https://gestify-be.herokuapp.com/user/${userId}/providers`, this.provider, {
-        headers: { Authorization: `Bearer ${userToken}` },
-      }).then((result) => {
-        alert("Proveedor creado con éxito")
-        this.clearData()
-      }).catch((error) => {
-        console.log(error);
-        alert("Falló creación de proveedor")
-      });
+      axios
+        .post(
+          `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`,
+          this.survey,
+          {
+            headers: { Authorization: `Bearer ${userToken}` },
+          }
+        )
+        .then((result) => {
+          alert("Encuesta creado con éxito");
+          this.clearData();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Falló creación de encuesta");
+        });
     },
 
     clearData: function () {
-      this.provider.p_name = "";
-      this.provider.p_telephone = "";
-      this.provider.p_email = "";
-    }
-
+      this.survey.id = "";
+      this.survey.document = "";
+      this.survey.question_one = "";
+      this.survey.question_two = "";
+      this.survey.question_three = "";
+      this.survey.question_four = "";
+      this.survey.question_five = "";
+    },
   },
 };
 </script>

@@ -1,27 +1,33 @@
 <template>
   <div>
-    <h1>Consulta de Productos</h1>
+    <h1>Consulta de Afiliados</h1>
     <div class="scroll-table">
       <table class="table">
         <thead>
           <tr class="table__header">
-            <th class="table__header-item">Código</th>
-            <th class="table__header-item">Nombre</th>
-            <th class="table__header-item">Stock</th>
-            <th class="table__header-item">Proveedor</th>
-            <th class="table__header-item">Categoría</th>
-            <th class="table__header-item">Costo unitario</th>
-            <th class="table__header-item">Acciones</th>
+            <th class="table__header-item">Id</th>
+            <th class="table__header-item">Nombres</th>
+            <th class="table__header-item">Apellidos</th>
+            <th class="table__header-item">Tipo Documento</th>
+            <th class="table__header-item">N° Documento</th>
+            <th class="table__header-item">Email</th>
+            <th class="table__header-item">Celular</th>
+            <th class="table__header-item">Ciudad</th>
+            <th class="table__header-item">Dirección</th>
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(product, index) in userProducts" :key="index">
-            <td class="table__body-item">{{ product.code }}</td>
-            <td class="table__body-item">{{ product.p_name }}</td>
-            <td class="table__body-item">{{ product.quantity }}</td>
-            <td class="table__body-item">{{ product.prov_name }}</td>
-            <td class="table__body-item">{{ product.category }}</td>
-            <td class="table__body-item">$ {{ product.price }}</td>
+          <tr v-for="(affiliate, index) in affiliates" :key="index">
+            <td class="table__body-item">{{ affiliate.id }}</td>
+            <td class="table__body-item">{{ affiliate.name }}</td>
+            <td class="table__body-item">{{ affiliate.lastname }}</td>
+            <td class="table__body-item">{{ affiliate.document }}</td>
+            <td class="table__body-item">{{ affiliate.document_number }}</td>
+            <td class="table__body-item">$ {{ affiliate.email }}</td>
+            <td class="table__body-item">$ {{ affiliate.phone }}</td>
+            <td class="table__body-item">$ {{ affiliate.city }}</td>
+            <td class="table__body-item">$ {{ affiliate.address }}</td>
+
             <td class="table__body-item">
               <button class="edit-btn" @click="openEditModal(index)">
                 <ges-icon icon="edit" size="lg"></ges-icon>
@@ -38,110 +44,114 @@
         </tbody>
       </table>
     </div>
-    <ModalEditProduct
+    <ModalEditAffiliate
       v-show="isModalVisible"
       @close="closeModal"
-      v-bind="editProduct"
+      v-bind="editAffiliate"
     >
-    </ModalEditProduct>
+    </ModalEditAffiliate>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
-      @delete-item="deleteProduct"
-      :idItem="deleteProductId"
+      @delete-element="deleteAffiliate"
+      :idElement="deleteAffiliateId"
     ></ConfirmationModal>
   </div>
 </template>
 <script>
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import ModalEditProduct from "../modals/ModalEditProduct.vue";
+import ModalEditAffiliate from "../modals/ModalEditAffiliate.vue";
 import ConfirmationModal from "../modals/ConfirmationModal.vue";
 
 export default {
-  name: "consultaProductos",
+  name: "consultaAfiliados",
   components: {
-    ModalEditProduct,
+    ModalEditAffiliate,
     ConfirmationModal,
   },
   data: function () {
     return {
-      product: {
-        code: "",
-        prov_name: "",
-        p_name: "",
-        quantity: "",
-        movement: "Entrada",
-        price: "",
-        category: "",
-        description: "",
+      affiliate: {
+        id: "",
+        name: "",
+        lastname: "",
+        document: "",
+        document_number: "",
+        email: "",
+        phone: "",
+        city: "",
+        address: "",
       },
-      userProducts: [],
-      editProduct: {},
+      affiliates: [],
+      editAffiliate: {},
       isModalVisible: false,
-      filterProductsInput: "",
+      filterAffiliatesInput: "",
       isConfirmationModalVisible: false,
-      deleteProductId: {},
+      deleteAffiliateId: {},
     };
   },
   methods: {
-    getUserProducts: function () {
+    getAffiliates: function () {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
       axios
-        .get(`https://gestify-be.herokuapp.com/user/${userId}/products`, {
-          headers: { Authorization: `Bearer ${userToken}` },
-        })
+        .get(
+          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates`,
+          {
+            headers: { Authorization: `Bearer ${userToken}` },
+          }
+        )
         .then((result) => {
-          this.userProducts = result.data;
+          this.affiliates = result.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
 
-    openEditModal(productId) {
+    openEditModal(affiliateId) {
       this.isModalVisible = true;
-      this.editProduct = this.userProducts[productId];
+      this.editAffiliate = this.affiliates[affiliateId];
     },
     closeModal() {
       this.isModalVisible = false;
-      this.getUserProducts()
+      this.getAffiliates();
     },
 
     closeConfirmationModal() {
       this.isConfirmationModalVisible = false;
     },
 
-    openConfirmationModal(productId) {
+    openConfirmationModal(affiliateId) {
       this.isConfirmationModalVisible = true;
-      this.deleteProductId = productId;
+      this.deleteAffiliateId = affiliateId;
     },
 
-    deleteProduct(productCodeDelete) {
+    deleteAffiliate(affiliateIdDelete) {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
-      let productId = this.userProducts[productCodeDelete].code;
+      let affiliateId = this.affiliates[affiliateIdDelete].id;
       axios
         .delete(
-          `https://gestify-be.herokuapp.com/user/${userId}/products/${productId}`,
+          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates/${affiliateId}`,
           {
             headers: { Authorization: `Bearer ${userToken}` },
           }
         )
         .then((result) => {
-          alert("Producto eliminado con éxito");
-          this.getUserProducts();
+          alert("Afiliado eliminado con éxito");
+          this.getAffiliates();
           this.closeModal();
         })
         .catch((error) => {
           console.log(error);
-          alert("Falló eliminación de producto");
+          alert("Falló eliminación de afiliado");
         });
     },
   },
   beforeMount() {
-    this.getUserProducts();
+    this.getAffiliates();
   },
 };
 </script>

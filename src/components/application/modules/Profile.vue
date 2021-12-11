@@ -174,7 +174,7 @@ export default {
       let userId = jwt_decode(userToken).user_id.toString();
 
       axios
-        .get(`https://gestify-be.herokuapp.com/user/${userId}`, {
+        .get(`https://eps-authms.herokuapp.com/user/${userId}`, {
           headers: { Authorization: `Bearer ${userToken}` },
         })
         .then((result) => {
@@ -194,7 +194,7 @@ export default {
     verifyToken: function () {
       return axios
         .post(
-          "https://gestify-be.herokuapp.com/refresh",
+          "https://eps-authms.herokuapp.com/refresh",
           { refresh: localStorage.getItem("token_refresh") },
           { headers: {} }
         )
@@ -219,7 +219,7 @@ export default {
       let userToken = localStorage.getItem("token_access");
       let userId = jwt_decode(userToken).user_id.toString();
       axios
-        .put(`https://gestify-be.herokuapp.com/user/${userId}`, this.user, {
+        .put(`https://eps-authms.herokuapp.com/user/${userId}`, this.user, {
           headers: { Authorization: `Bearer ${userToken}` },
         })
         .then((result) => {
