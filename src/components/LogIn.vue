@@ -84,13 +84,12 @@ export default {
             token_access: result.data.logIn.access,
             token_refresh: result.data.logIn.refresh,
           };
-          this.$emit("logInSuccess", dataLogIn);          
-          this.$router.push({ name: "mainLayout", });
+          this.$emit("logInSuccess", dataLogIn);
+          this.$router.push({ name: "mainLayout" });
         })
         .catch((error) => {
           console.log(error);
-          if (error.response.status == "401")
-            alert("Verifica tus credenciales para continuar");
+          alert("ERROR 401: Verifica tus credenciales para continuar");
         });
     },
   },
