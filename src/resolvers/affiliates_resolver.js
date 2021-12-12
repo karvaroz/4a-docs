@@ -1,16 +1,10 @@
 const affiliateResolver = {
     Query: {
-        affiliatesByDocument: async(_, { document }, { dataSources, userIdToken }) => {
-            if (userId == userIdToken)
-                return await dataSources.accountAPI.affiliatesByDocument(document)
-            else
-                return null
+        affiliatesByDocument_number: async(_, {document_number }, { dataSources, userIdToken }) => {
+            return await dataSources.affiliatesAPI.affiliatesByDocument_number(document_number)
         },
-        allAfiliates: async(_,{ dataSources, userIdToken }) => {
-            if (userId == userIdToken)
-                return await dataSources.accountAPI.allAfiliates()
-            else
-                return null
+        allAffiliates: async(_,{affiliateData},{dataSources}) => {
+            return await dataSources.affiliatesAPI.allAffiliates()
         },
     },
     Mutation: {
@@ -19,27 +13,16 @@ const affiliateResolver = {
             name: affiliateInput.name,
             lastname: affiliateInput.lastname,
             document: affiliateInput.document,
+            document_number: affiliateInput.document_number,
             email: affiliateInput.email,
             phone: affiliateInput.phone,
             city: affiliateInput.city,
             address: affiliateInput.address,
           };
-          return await dataSources.authAPI.createAffiliate(affiliateData);
+          return await dataSources.affiliatesAPI.createAffiliate(affiliateData);
         },
-        updateAffiliate: (_, { affiliateInput }, {affiliateID},{ dataSources }) =>{
-            const affiliateData = {
-                name: affiliateInput.name,
-                lastname: affiliateInput.lastname,
-                document: affiliateInput.document,
-                email: affiliateInput.email,
-                phone: affiliateInput.phone,
-                city: affiliateInput.city,
-                address: affiliateInput.address,
-            };
-            return await dataSources.authAPI.updateAffiliate(affiliateData,affiliateID);
-        },
-        deleteAffiliate: (_, { affiliateID }, { dataSources }) =>{
-            return await dataSources.authAPI.deleteAffiliate(affiliateID);
+        deleteAffiliate: async(_, { affiliateID }, { dataSources }) =>{
+            return await dataSources.affiliatesAPI.deleteAffiliate(affiliateID);
         }
     }
 };

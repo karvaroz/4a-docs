@@ -5,12 +5,12 @@ class SurveyAPI extends RESTDataSource {
     super();
     this.baseURL = serverConfig.covidSurvey_api_url;
   }
-  async createSurvey(user) {
-    user = new Object(JSON.parse(JSON.stringify(user)));
-    return await this.post(`/surveys`, user);
+  async createSurvey(survey) {
+    survey = new Object(JSON.parse(JSON.stringify(survey)));
+    return await this.post(`/surveys`, survey);
   }
-  async getSurveysByDocument(userId) {
-    return await this.get(`/surveys/${userId}`);
+  async getSurveysByDocument(document) {
+    return await this.get(`/surveys/${document}`);
   }
 }
 

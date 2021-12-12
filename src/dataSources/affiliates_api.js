@@ -7,14 +7,10 @@ class AffiliatesAPI extends RESTDataSource {
   }
   async createAffiliate(affiliate) {
     affiliate = new Object(JSON.parse(JSON.stringify(affiliate)));
-    return await this.post("/affiliates", affiliate);
-  }
-  async updateAffiliate(affiliate, affiliateID){
-    affiliate = new Object(JSON.parse(JSON.stringify(affiliate)));
-    return await this.post(`/affiliates-update/${affiliateID}/`, affiliate);
+    return await this.post("/affiliates/", affiliate);
   }
   async deleteAffiliate(affiliateID){
-    return await this.get(`/affiliates-update/${affiliateID}/`);
+    return await this.get(`/affiliates-delete/${affiliateID}/`);
   }
   async allAffiliates() {
     return await this.get(`/affiliates-list/`);

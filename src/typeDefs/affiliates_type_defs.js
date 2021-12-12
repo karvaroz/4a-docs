@@ -6,6 +6,7 @@ const affiliatesTypeDefs = gql`
     name: String!
     lastname: String!
     document: String!
+    document_number: String!
     email: String!   
     phone: String!
     city: String!
@@ -13,24 +14,34 @@ const affiliatesTypeDefs = gql`
     created: String!
     updated: String!
   }
-  input affiliateInput {
+  input affiliateIUInput {
     id: Int!
     name: String!
     lastname: String!
     document: String!
+    document_number: String!
+    email: String!   
+    phone: String!
+    city: String!
+    address: String!
+  }
+  input affiliateInput {
+    name: String!
+    lastname: String!
+    document: String!
+    document_number: String!
     email: String!   
     phone: String!
     city: String!
     address: String!
   }
   type Mutation {
-    createAffiliate(affiliateInput: affiliateInput): String
-    updateAffiliate(id: int!,affiliateInput: affiliateInput!): String
-    deleteAffiliate(id: int!): String
+    createAffiliate(affiliateInput: affiliateInput): Affiliates!
+    deleteAffiliate(affiliateID: ID!): String!
   }
   extend type Query {
-    allAffiliates(): [Affiliates]
-    affiliatesByDocument(document: String!): Affiliates
+    allAffiliates: [Affiliates]
+    affiliatesByDocument_number(document_number: String!): Affiliates
   }
   
 `;
