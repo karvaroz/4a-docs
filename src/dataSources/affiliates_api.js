@@ -9,15 +9,18 @@ class AffiliatesAPI extends RESTDataSource {
     affiliate = new Object(JSON.parse(JSON.stringify(affiliate)));
     return await this.post("/affiliates", affiliate);
   }
+  async updateAffiliate(affiliate, affiliateID){
+    affiliate = new Object(JSON.parse(JSON.stringify(affiliate)));
+    return await this.post(`/affiliates-update/${affiliateID}/`, affiliate);
+  }
+  async deleteAffiliate(affiliateID){
+    return await this.get(`/affiliates-update/${affiliateID}/`);
+  }
+  async allAffiliates() {
+    return await this.get(`/affiliates-list/`);
+  }
   async affiliatesByDocument_number(document_number) {
     return await this.get(`/affiliates/${document_number}`);
-  }
-  async createSurvey(covidSurvey) {
-    covidSurvey = new Object(JSON.parse(JSON.stringify(covidSurvey)));
-    return await this.post("/surveys", covidSurvey);
-  }
-  async surveysByDocument(document) {
-    return await this.get(`/surveys/${document}`);
   }
 }
 
