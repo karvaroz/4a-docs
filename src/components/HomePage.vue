@@ -3,7 +3,7 @@
     <div class="bg-img"></div>
     <div class="container">
       <nav class="nav">
-        <img src="../assets/img/g-icon.svg" alt="Gestify" class="gestify-icon" />
+        <img src="../assets/img/g-icon.svg" alt="Gestify" class="gestify-icon" /> 
       </nav>
       <div class="content">
         <section class="welcome">
