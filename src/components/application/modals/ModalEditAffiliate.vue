@@ -149,10 +149,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 import jwt_decode from "jwt-decode";
+
 export default {
   name: "ModalEditAffiliate",
+  
   data: function () {
     return {
       affiliateUpdated: {
@@ -179,6 +181,7 @@ export default {
     city: "",
     address: "",
   },
+  
   methods: {
     close() {
       this.$emit("close");

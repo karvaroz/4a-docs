@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+// import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
 
 import gql from "graphql-tag";
@@ -115,7 +115,7 @@ async function isAuth() {
 router.beforeEach(async (to, from) => {
   var is_auth = await isAuth();
   if (is_auth == to.meta.requiresAuth) return true;
-  if (is_auth) return { name: "home" };
+  if (is_auth) return { name: "mainLayout" };
   return { name: "logIn" };
 });
 

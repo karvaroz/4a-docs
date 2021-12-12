@@ -71,6 +71,17 @@
                 required
               />
             </div>
+            <div class="input-container">
+              <label for="key" class="input-container__label">Key</label>
+              <input
+                type="text"
+                class="input-container__input"
+                name="key"
+                id="key"
+                v-model="user.key"
+                required
+              />
+            </div>
             <button type="submit" class="primary-btn">Registrarme</button>
           </form>
           <div class="bottom-actions">
@@ -98,6 +109,7 @@ export default {
         username: "",
         email: "",
         password: "",
+        key: "",
       },
     };
   },
@@ -133,5 +145,4 @@ export default {
     },
   },
 };
-
 </script>
