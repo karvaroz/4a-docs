@@ -91,67 +91,117 @@ export default {
       deleteAffiliateId: {},
     };
   },
-  methods: {
-    getAffiliates: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      axios
-        .get(
-          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates`,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
+  apollo: {
+    allAffiliates: {
+      query: gql`
+        query AllAffiliates {
+          allAffiliates {
+            id
+            name
+            lastname
+            document
+            document_number
+            email
+            phone
+            city
+            address
+            created
+            updated
           }
-        )
-        .then((result) => {
+        }
+      `,
+      variables: {
+        afiliados: this.affiliate,
+      }
+              .then((result) => {
           this.affiliates = result.data;
         })
         .catch((error) => {
           console.log(error);
-        });
-    },
-
-    openEditModal(affiliateId) {
-      this.isModalVisible = true;
-      this.editAffiliate = this.affiliates[affiliateId];
-    },
-    closeModal() {
-      this.isModalVisible = false;
-      this.getAffiliates();
-    },
-
-    closeConfirmationModal() {
-      this.isConfirmationModalVisible = false;
-    },
-
-    openConfirmationModal(affiliateId) {
-      this.isConfirmationModalVisible = true;
-      this.deleteAffiliateId = affiliateId;
-    },
-
-    deleteAffiliate(affiliateIdDelete) {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      let affiliateId = this.affiliates[affiliateIdDelete].id;
-      axios
-        .delete(
-          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates/${affiliateId}`,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
-          }
-        )
-        .then((result) => {
-          alert("Afiliado eliminado con éxito");
-          this.getAffiliates();
-          this.closeModal();
         })
-        .catch((error) => {
-          console.log(error);
-          alert("Falló eliminación de afiliado");
-        });
+    },
+    affiliatesByDocument_number: {
+      query: gql`
+        query AffiliatesByDocument_number($documentNumber: String!) {
+          affiliatesByDocument_number(document_number: $documentNumber) {
+            id
+            name
+            lastname
+            document
+            document_number
+            email
+            phone
+            city
+            address
+            created
+            updated
+          }
+        }
+      `,
+      variables: {
+        afiliados: this.affiliate,
+      },
     },
   },
-  beforeMount() {
-    this.getAffiliates();
-  },
+
+  // methods: {
+
+  //   getAffiliates: function () {
+  //     let userToken = localStorage.getItem("token_access");
+  //     let userId = jwt_decode(userToken).user_id.toString();
+  //     axios
+  //       .get(
+  //         `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates`,
+  //         {
+  //           headers: { Authorization: `Bearer ${userToken}` },
+  //         }
+  //       )
+        // .then((result) => {
+        //   this.affiliates = result.data;
+        // })
+        // .catch((error) => {
+        //   console.log(error);
+        // });
+  //   },
+  //   openEditModal(affiliateId) {
+  //     this.isModalVisible = true;
+  //     this.editAffiliate = this.affiliates[affiliateId];
+  //   },
+  //   closeModal() {
+  //     this.isModalVisible = false;
+  //     this.getAffiliates();
+  //   },
+  //   closeConfirmationModal() {
+  //     this.isConfirmationModalVisible = false;
+  //   },
+  //   openConfirmationModal(affiliateId) {
+  //     this.isConfirmationModalVisible = true;
+  //     this.deleteAffiliateId = affiliateId;
+  //   },
+  //   deleteAffiliate(affiliateIdDelete) {
+  //     let userToken = localStorage.getItem("token_access");
+  //     let userId = jwt_decode(userToken).user_id.toString();
+  //     let affiliateId = this.affiliates[affiliateIdDelete].id;
+  //     axios
+  //       .delete(
+  //         `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates/${affiliateId}`,
+  //         {
+  //           headers: { Authorization: `Bearer ${userToken}` },
+  //         }
+  //       )
+  //       .then((result) => {
+  //         alert("Afiliado eliminado con éxito");
+  //         this.getAffiliates();
+  //         this.closeModal();
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         alert("Falló eliminación de afiliado");
+  //       });
+  //   },
+  // },
+  // beforeMount() {
+  //   this.getAffiliates();
+  // },
 };
 </script>
