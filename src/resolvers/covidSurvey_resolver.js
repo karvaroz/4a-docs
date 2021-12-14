@@ -1,7 +1,10 @@
 const covidSurveyResolver = {
   Query: {
-    surveysByDocument: async(_, { document }, { dataSources, userIdToken }) => {
+    surveysByDocument: async(_, { document }, { dataSources }) => {
       return await dataSources.surveysAPI.getSurveysByDocument(document)
+    },
+    getAllSurveys: async(_, { document }, { dataSources }) => {
+      return await dataSources.surveysAPI.getAllSurveys()
     },
 },
   Mutation: {

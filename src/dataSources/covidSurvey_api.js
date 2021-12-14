@@ -15,6 +15,9 @@ class SurveyAPI extends RESTDataSource {
   async getSurveysByDocument(document) {
     return await this.get(`/surveys/${document}`);
   }
+  async getAllSurveys() {
+    return await this.get(`/surveys`);
+  }
 }
 
 module.exports = SurveyAPI;

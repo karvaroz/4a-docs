@@ -20,6 +20,7 @@ const surveyTypeDefs = gql`
   }
   extend type Query {
     surveysByDocument(document: Int!): [Survey]
+    getAllSurveys: [Survey]
   }
   extend type Mutation {
     createSurvey(survey: SurveyInput!): Survey
