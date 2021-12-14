@@ -23,6 +23,7 @@ const surveyTypeDefs = gql`
   }
   extend type Mutation {
     createSurvey(survey: SurveyInput!): Survey
+    deleteSurveyById(id: ID!): String
   }
 `;
 
