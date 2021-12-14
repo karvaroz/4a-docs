@@ -132,7 +132,7 @@
 
 <script>
 import jwt_decode from "jwt-decode";
-import axios from "axios";
+import gql from "graphql-tag";
 export default {
   name: "profile",
 

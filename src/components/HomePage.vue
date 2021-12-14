@@ -3,7 +3,11 @@
     <div class="bg-img"></div>
     <div class="container">
       <nav class="nav">
+<<<<<<< HEAD
         <img src="../assets/img/g-icon.png" alt="Gestify" class="gestify-icon" />
+=======
+        <img src="../assets/img/g-icon.svg" alt="Gestify" class="gestify-icon" /> 
+>>>>>>> 50f7295553977990125a35fecfb5929314e6438b
       </nav>
       <div class="content">
         <section class="welcome">

@@ -111,7 +111,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 import jwt_decode from "jwt-decode";
 export default {
   name: "registroEncuestas",

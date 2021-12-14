@@ -140,8 +140,9 @@
 </template>
 
 <script>
-import axios from "axios";
+import gql from "graphql-tag";
 import jwt_decode from "jwt-decode";
+
 export default {
   name: "ModalEditSurvey",
   data: function () {
@@ -167,48 +168,28 @@ export default {
     question_five: "",
   },
   methods: {
-    close() {
-      this.$emit("close");
-    },
-
-    getSurveys: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      axios
-        .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
-          headers: { Authorization: `Bearer ${userToken}` },
+    updateSurvey: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation ($surveyInput: SurveyInput!) {
+              createSurvey(surveyInput: $surveyInput) {
+                id
+                document
+                question_one
+                question_two
+                question_three
+                question_four
+                question_five
+              }
+            }
+          `,
+          variables: {
+            encuesta: this.surveyUpdated,
+          },
         })
         .then((result) => {
-          this.surveys = result.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    setDataSurvey: function () {
-      this.surveyUpdated.id = this.id;
-      this.surveyUpdated.document = this.document;
-      this.surveyUpdated.question_one = this.question_one;
-      this.surveyUpdated.question_two = this.question_two;
-      this.surveyUpdated.question_three = this.question_three;
-      this.surveyUpdated.question_four = this.question_four;
-      this.surveyUpdated.question_five = this.question_five;
-    },
-    updateSurvey: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      let surveyId = this.document;
-      this.setDataSurvey();
-      axios
-        .put(
-          `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
-          this.surveyUpdated,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
-          }
-        )
-        .then((result) => {
+          console.log(result);
           alert("Encuesta editada con éxito");
           this.$emit("close");
         })
@@ -217,6 +198,57 @@ export default {
           alert("Falló edición de encuesta");
         });
     },
+
+    // close() {
+    //   this.$emit("close");
+    // },
+
+    // getSurveys: function () {
+    //   let userToken = localStorage.getItem("token_access");
+    //   let userId = jwt_decode(userToken).user_id.toString();
+    //   axios
+    //     .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
+    //       headers: { Authorization: `Bearer ${userToken}` },
+    //     })
+    //     .then((result) => {
+    //       this.surveys = result.data;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
+
+    // setDataSurvey: function () {
+    //   this.surveyUpdated.id = this.id;
+    //   this.surveyUpdated.document = this.document;
+    //   this.surveyUpdated.question_one = this.question_one;
+    //   this.surveyUpdated.question_two = this.question_two;
+    //   this.surveyUpdated.question_three = this.question_three;
+    //   this.surveyUpdated.question_four = this.question_four;
+    //   this.surveyUpdated.question_five = this.question_five;
+    // },
+    // updateSurvey: function () {
+    //   let userToken = localStorage.getItem("token_access");
+    //   let userId = jwt_decode(userToken).user_id.toString();
+    //   let surveyId = this.document;
+    //   this.setDataSurvey();
+    //   axios
+    //     .put(
+    //       `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
+    //       this.surveyUpdated,
+    //       {
+    //         headers: { Authorization: `Bearer ${userToken}` },
+    //       }
+    //     )
+    // .then((result) => {
+    //   alert("Encuesta editada con éxito");
+    //   this.$emit("close");
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    //   alert("Falló edición de encuesta");
+    // });
+    // },
   },
 };
 </script>

@@ -48,35 +48,36 @@
 </template>
 <script>
 import jwt_decode from "jwt-decode";
-import axios from "axios";
+import gql from "graphql-tag";
 export default {
   name: "mainLayout",
+
   data: () => {
     return {
       options: [
         {
-          title: "Proveedores",
+          title: "Afiliados",
           children: [
             {
-              name: "Registro de proveedores",
-              url: "/dashboard/registro-proveedores",
+              name: "Registro de afiliados",
+              url: "/dashboard/registro-afiliados",
             },
             {
-              name: "Consultar proveedores",
-              url: "/dashboard/consultar-proveedores",
+              name: "Consultar afiliados",
+              url: "/dashboard/consultar-afiliados",
             },
           ],
         },
         {
-          title: "Productos",
+          title: "Encuestas",
           children: [
             {
-              name: "Ingreso de producto",
-              url: "/dashboard/registro-productos",
+              name: "Ingreso de encuestas",
+              url: "/dashboard/registro-encuestas",
             },
             {
-              name: "Listado de productos",
-              url: "/dashboard/consulta-productos",
+              name: "Listado de encuestas",
+              url: "/dashboard/consulta-encuestas",
             },
           ],
         },
@@ -88,71 +89,91 @@ export default {
       is_auth: Boolean,
     };
   },
-  methods: {
-    sendToModule: function (subitem) {
-      let urlName = subitem.url;
-      this.$router.push({ name: subitem.url });
-    },
 
-    logOut: function () {
-      localStorage.clear();
-      this.$router.push({ name: "logIn" });
-    },
-
-    getUserData: async function () {
-      if (
-        localStorage.getItem("token_access") === null ||
-        localStorage.getItem("token_refresh") === null
-      ) {
-        this.logOut;
-        return;
-      }
-
-      await this.verifyToken();
-
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-
-      axios
-        .get(`https://eps-authms.herokuapp.com/user/${userId}`, {
-          headers: { Authorization: `Bearer ${userToken}` },
-        })
-        .then((result) => {
-          this.name = result.data.name;
-          this.email = result.data.email;
-          this.username = result.data.username;
-        })
-        .catch(() => this.logOut);
-    },
-
-    verifyToken: function () {
-      return axios
-        .post(
-          "https://gestify-be.herokuapp.com/refresh",
-          { refresh: localStorage.getItem("token_refresh") },
-          { headers: {} }
-        )
-        .then((result) => {
-          localStorage.setItem("token_access", result.data.access);
-        })
-        .catch(() => {
-          this.logOut;
-        });
-    },
-    created: async function () {
-      this.getUserData;
-    },
-
-    verifyAuth: function () {
-      this.is_auth = localStorage.getItem("isAuth") || false;
-      if (this.is_auth == false) this.$router.push({ name: "logIn" });
-      else this.$router.push({ name: "mainLayout" });
+  apollo: {
+    userDetailById: {
+      query: gql`
+        query ($userId: Int!) {
+          userDetailById(userId: $userId) {
+            username
+            name
+            email
+          }
+        }
+      `,
+      variables() {
+        return {
+          userId: this.userId,
+        };
+      },
     },
   },
 
-  beforeMount() {
-    this.getUserData();
-    this.verifyAuth();
-  },
+  // methods: {
+  //   sendToModule: function (subitem) {
+  //     let urlName = subitem.url;
+  //     this.$router.push({ name: subitem.url });
+  //   },
+
+    // logOut: function () {
+    //   localStorage.clear();
+    //   this.$router.push({ name: "logIn" });
+    // },
+
+  //   getUserData: async function () {
+  //     if (
+  //       localStorage.getItem("token_access") === null ||
+  //       localStorage.getItem("token_refresh") === null
+  //     ) {
+  //       this.logOut;
+  //       return;
+  //     }
+
+  //     await this.verifyToken();
+
+  //     let userToken = localStorage.getItem("token_access");
+  //     let userId = jwt_decode(userToken).user_id.toString();
+
+  //     axios
+  //       .get(`https://eps-authms.herokuapp.com/user/${userId}`, {
+  //         headers: { Authorization: `Bearer ${userToken}` },
+  //       })
+  //       .then((result) => {
+  //         this.name = result.data.name;
+  //         this.email = result.data.email;
+  //         this.username = result.data.username;
+  //       })
+  //       .catch(() => this.logOut);
+  //   },
+
+  //   verifyToken: function () {
+  //     return axios
+  //       .post(
+  //         "https://gestify-be.herokuapp.com/refresh",
+  //         { refresh: localStorage.getItem("token_refresh") },
+  //         { headers: {} }
+  //       )
+  //       .then((result) => {
+  //         localStorage.setItem("token_access", result.data.access);
+  //       })
+  //       .catch(() => {
+  //         this.logOut;
+  //       });
+  //   },
+  //   created: async function () {
+  //     this.getUserData;
+  //   },
+
+  //   verifyAuth: function () {
+  //     this.is_auth = localStorage.getItem("isAuth") || false;
+  //     if (this.is_auth == false) this.$router.push({ name: "logIn" });
+  //     else this.$router.push({ name: "mainLayout" });
+  //   },
+  // },
+
+  // beforeMount() {
+  //   this.getUserData();
+  //   this.verifyAuth();
+  // },
 };
 </script>
