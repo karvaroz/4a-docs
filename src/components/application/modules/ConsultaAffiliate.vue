@@ -17,7 +17,7 @@
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(affiliate, index) in affiliates" :key="index">
+          <tr v-for="(affiliate, index) in allAffiliates" :key="index">
             <td class="table__body-item">{{ affiliate.id }}</td>
             <td class="table__body-item">{{ affiliate.name }}</td>
             <td class="table__body-item">{{ affiliate.lastname }}</td>
@@ -60,7 +60,6 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import jwt_decode from "jwt-decode";
 import ModalEditAffiliate from "../modals/ModalEditAffiliate.vue";
 import ConfirmationModal from "../modals/ConfirmationModal.vue";
 
@@ -70,7 +69,7 @@ export default {
     ModalEditAffiliate,
     ConfirmationModal,
   },
-  data: function () {
+  data: function (){
     return {
       affiliate: {
         id: "",
@@ -105,20 +104,9 @@ export default {
             phone
             city
             address
-            created
-            updated
           }
         }
       `,
-      variables: {
-        afiliados: this.affiliate,
-      }
-              .then((result) => {
-          this.affiliates = result.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        })
     },
     affiliatesByDocument_number: {
       query: gql`
@@ -138,9 +126,6 @@ export default {
           }
         }
       `,
-      variables: {
-        afiliados: this.affiliate,
-      },
     },
   },
 

@@ -9,8 +9,10 @@
     background-repeat: no-repeat;
     background-size: 70%;
     background-position: center;
+    background-color: white;
 }
 
 .register-img {
     max-width: 550px;
+    display: none;
 }

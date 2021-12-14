@@ -60,11 +60,11 @@ export default {
           children: [
             {
               name: "Registro de afiliados",
-              url: "/dashboard/registro-afiliados",
+              url: "/dashboard/registro-affiliates",
             },
             {
               name: "Consultar afiliados",
-              url: "/dashboard/consultar-afiliados",
+              url: "/dashboard/consulta-affiliates",
             },
           ],
         },
