@@ -9,8 +9,8 @@ class SurveyAPI extends RESTDataSource {
     survey = new Object(JSON.parse(JSON.stringify(survey)));
     return await this.post(`/surveys`, survey);
   }
-  async getSurveysByDocument(id) {
-    return await this.get(`/surveys/${id}`);
+  async deleteSurveyById(id) {
+    return await this.delete(`/surveys/${id}`);
   }
   async getSurveysByDocument(document) {
     return await this.get(`/surveys/${document}`);
