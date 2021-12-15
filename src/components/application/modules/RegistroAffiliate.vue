@@ -1,19 +1,8 @@
 <template>
   <div>
     <h1 class="form-title">Registro de afiliados</h1>
-    <form class="global-form-container" v-on:submit.prevent="createAffiliate">
+    <form class="global-form-container" v-on:submit.prevent="registerAffiliate">
       <div class="register-form">
-        <div class="input-container">
-          <label for="id" class="input-container__label">Id</label>
-          <input
-            type="text"
-            class="input-container__input"
-            name="id"
-            id="id"
-            required
-            v-model="affiliate.id"
-          />
-        </div>
         <div class="input-container">
           <label for="name" class="input-container__label">Nombres</label>
           <input
@@ -22,7 +11,7 @@
             name="name"
             id="name"
             required
-            v-model="affiliate.name"
+            v-model="affiliateInput.name"
             maxlength="40"
           />
         </div>
@@ -34,7 +23,7 @@
             name="lastname"
             id="lastname"
             required
-            v-model="lastname"
+            v-model="affiliateInput.lastname"
             maxlength="40"
           />
         </div>
@@ -47,25 +36,25 @@
             name="document"
             id="document"
             required
-            v-model="document"
+            v-model="affiliateInput.document"
           >
             <option disabled>Seleccione</option>
             <option v-for="tipo in document" :key="tipo">
-              {{ tipo.document }}
+              {{ tipo }}
             </option>
           </select>
         </div>
         <div class="input-container">
           <label for="document_number" class="input-container__label"
-            >Número Document</label
+            >Número Documento</label
           >
           <input
-            type="number"
+            type="text"
             class="input-container__input"
             name="price"
             id="price"
             required
-            v-model="price"
+            v-model="affiliateInput.document_number"
           />
         </div>
         <div class="input-container">
@@ -76,40 +65,40 @@
             name="email"
             id="email"
             required
-            v-model="email"
+            v-model="affiliateInput.email"
           />
         </div>
         <div class="input-container">
           <label for="phone" class="input-container__label">Celular</label>
           <input
-            type="number"
+            type="text"
             class="input-container__input"
             name="phone"
             id="phone"
             required
-            v-model="phone"
+            v-model="affiliateInput.phone"
           />
         </div>
         <div class="input-container">
-          <label for="city" class="input-container__label">Celular</label>
+          <label for="city" class="input-container__label">Ciudad</label>
           <input
             type="text"
             class="input-container__input"
             name="city"
             id="city"
             required
-            v-model="city"
+            v-model="affiliateInput.city"
           />
         </div>
         <div class="input-container">
-          <label for="address" class="input-container__label">Celular</label>
+          <label for="address" class="input-container__label">Dirección</label>
           <input
             type="text"
             class="input-container__input"
             name="address"
             id="address"
             required
-            v-model="address"
+            v-model="affiliateInput.address"
           />
         </div>
       </div>
@@ -121,59 +110,46 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import jwt_decode from "jwt-decode";
-
 export default {
-  name: "registroAfiliado",
+  name: "registroAfiliados",
   data: function () {
     return {
-      affiliate: {
-        id: "",
+      affiliateInput: {
         name: "",
         lastname: "",
-        document: [],
+        document: "",
         document_number: "",
         email: "",
         phone: "",
         city: "",
         address: "",
       },
+      document: ["CC","TI","RC","OT"],
     };
   },
   methods: {
-    getAffiliates: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      axios
-        .get(
-          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates`,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
+    registerAffiliate: async function(){
+      await this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($affiliateInput: affiliateInput) {
+            createAffiliate(affiliateInput: $affiliateInput) {
+              name
+              document_number
+            }
           }
-        )
-        .then((result) => {
-          this.affiliates = result.data;
-        });
-    },
-    createAffiliate: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      axios
-        .post(
-          `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates`,
-          this.affiliate,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
-          }
-        )
-        .then((result) => {
-          alert("Afiliado creado con éxito");
-          this.clearData();
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Falló registro de afiliado");
-        });
+        `,
+        variables: {
+          affiliateInput: this.affiliateInput
+        },
+      })
+      .then(res => {
+        alert(`Se creo el afiliado ${res.data.createSurvey.name} con documento ${res.data.createSurvey.document_number}`)
+      })
+      .catch(err => {
+        alert("Hubo un error");
+        console.log(err)
+      })
     },
     clearData: function () {
       this.affiliate.id = "";
@@ -187,9 +163,6 @@ export default {
       this.affiliate.address = "";
 
     },
-  },
-  beforeMount() {
-    this.getAffiliates();
   },
 };
 </script>

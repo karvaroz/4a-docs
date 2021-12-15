@@ -23,10 +23,10 @@
             <td class="table__body-item">{{ affiliate.lastname }}</td>
             <td class="table__body-item">{{ affiliate.document }}</td>
             <td class="table__body-item">{{ affiliate.document_number }}</td>
-            <td class="table__body-item">$ {{ affiliate.email }}</td>
-            <td class="table__body-item">$ {{ affiliate.phone }}</td>
-            <td class="table__body-item">$ {{ affiliate.city }}</td>
-            <td class="table__body-item">$ {{ affiliate.address }}</td>
+            <td class="table__body-item">{{ affiliate.email }}</td>
+            <td class="table__body-item">{{ affiliate.phone }}</td>
+            <td class="table__body-item">{{ affiliate.city }}</td>
+            <td class="table__body-item">{{ affiliate.address }}</td>
 
             <td class="table__body-item">
               <button class="edit-btn" @click="openEditModal(index)">

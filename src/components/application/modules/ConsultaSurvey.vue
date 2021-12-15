@@ -15,14 +15,14 @@
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(survey, index) in surveys" :key="index">
+          <tr v-for="(survey, index) in getAllSurveys" :key="index">
             <td class="table__body-item">{{ survey.id }}</td>
             <td class="table__body-item">{{ survey.document }}</td>
-            <td class="table__body-item">{{ survey.question_one }}</td>
-            <td class="table__body-item">{{ survey.question_two }}</td>
-            <td class="table__body-item">{{ survey.question_three }}</td>
-            <td class="table__body-item">{{ survey.question_four }}</td>
-            <td class="table__body-item">{{ survey.question_five }}</td>
+            <td class="table__body-item">{{ survey.question_one ? "sí": "no" }}</td>
+            <td class="table__body-item">{{ survey.question_two ? "sí": "no" }}</td>
+            <td class="table__body-item">{{ survey.question_three ? "sí": "no" }}</td>
+            <td class="table__body-item">{{ survey.question_four ? "sí": "no" }}</td>
+            <td class="table__body-item">{{ survey.question_five ? "sí": "no" }}</td>
             <td class="table__body-item">
               <button class="edit-btn" @click="openEditSurveyModal(index)">
                 <ges-icon icon="edit" size="lg"></ges-icon>
@@ -58,7 +58,6 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import jwt_decode from "jwt-decode";
 import ModalEditSurvey from "../modals/ModalEditSurvey.vue";
 import ConfirmationModal from "../modals/ConfirmationModal.vue";
 export default {
@@ -67,7 +66,7 @@ export default {
     ModalEditSurvey,
     ConfirmationModal,
   },
-  data: function () {
+data: function (){
     return {
       survey: {
         id: "",
@@ -78,70 +77,98 @@ export default {
         question_four: "",
         question_five: "",
       },
-      surveys: [],
-      editSurvey: {},
+      editSurveys: {},
       isModalVisible: false,
+      filterSurveysInput: "",
       isConfirmationModalVisible: false,
-      deleteSurveyId: {},
+      deleteSurveysId: {},
     };
   },
-  methods: {
-    getSurveys: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      axios
-        .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
-          headers: { Authorization: `Bearer ${userToken}` },
-        })
-        .then((result) => {
-          this.surveys = result.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    openEditSurveyModal(surveyId) {
-      this.isModalVisible = true;
-      this.editSurvey = this.surveys[surveyId];
-    },
-    closeModal() {
-      this.isModalVisible = false;
-      this.getSurveys();
-    },
-
-    closeConfirmationModal() {
-      this.isConfirmationModalVisible = false;
-    },
-
-    openConfirmationModal(surveyId) {
-      this.isConfirmationModalVisible = true;
-      this.deleteSurveyId = surveyId;
-    },
-
-    deleteSurvey(surveyIdDelete) {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-      let surveyId = this.surveys[surveyIdDelete].document;
-      axios
-        .delete(
-          `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
+  apollo: {
+    getAllSurveys: {
+      query: gql`
+        query getAllSurveys {
+          getAllSurveys {
+            id
+            document
+            question_one
+            question_two
+            question_three
+            question_four
+            question_five
           }
-        )
-        .then((result) => {
-          alert("Encuesta eliminada con éxito");
-          this.getSurveys();
-          this.closeModal();
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Falló eliminación de encuesta");
-        });
+        }
+      `,
+    },
+    surveysByDocument: {
+      query: gql`
+        query surveysByDocument($documentNumber: Int!) {
+            surveysByDocument(document: $document) {
+              id
+              document
+              question_one
+              question_two
+              question_three
+              question_four
+              question_five
+            }
+        }
+      `,
     },
   },
-  beforeMount() {
-    this.getSurveys();
-  },
+  // methods: {
+  //   getSurveys: function () {
+  //     let userToken = localStorage.getItem("token_access");
+  //     let userId = jwt_decode(userToken).user_id.toString();
+  //     axios
+  //       .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
+  //         headers: { Authorization: `Bearer ${userToken}` },
+  //       })
+  //       .then((result) => {
+  //         this.surveys = result.data;
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   },
+  //   closeModal() {
+  //     this.isModalVisible = false;
+  //     this.getSurveys();
+  //   },
+
+  //   closeConfirmationModal() {
+  //     this.isConfirmationModalVisible = false;
+  //   },
+
+  //   openConfirmationModal(surveyId) {
+  //     this.isConfirmationModalVisible = true;
+  //     this.deleteSurveyId = surveyId;
+  //   },
+
+  //   deleteSurvey(surveyIdDelete) {
+  //     let userToken = localStorage.getItem("token_access");
+  //     let userId = jwt_decode(userToken).user_id.toString();
+  //     let surveyId = this.surveys[surveyIdDelete].document;
+  //     axios
+  //       .delete(
+  //         `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
+  //         {
+  //           headers: { Authorization: `Bearer ${userToken}` },
+  //         }
+  //       )
+  //       .then((result) => {
+  //         alert("Encuesta eliminada con éxito");
+  //         this.getSurveys();
+  //         this.closeModal();
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         alert("Falló eliminación de encuesta");
+  //       });
+  //   },
+  // },
+  // beforeMount() {
+  //   this.getSurveys();
+  // },
 };
 </script>

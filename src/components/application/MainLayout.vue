@@ -73,11 +73,11 @@ export default {
           children: [
             {
               name: "Ingreso de encuestas",
-              url: "/dashboard/registro-encuestas",
+              url: "/dashboard/registro-surveys",
             },
             {
               name: "Listado de encuestas",
-              url: "/dashboard/consulta-encuestas",
+              url: "/dashboard/consulta-surveys",
             },
           ],
         },

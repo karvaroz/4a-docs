@@ -60,12 +60,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "consultar-surveys",
+        path: "consulta-surveys",
         component: ConsultaSurvey,
         meta: { requiresAuth: true },
       },
       {
-        path: "/user/profile",
+        path: "user/profile",
         component: Profile,
         meta: { requiresAuth: true },
       },

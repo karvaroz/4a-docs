@@ -1,19 +1,8 @@
 <template>
   <div>
     <h1 class="form-title">Registro Encuestas</h1>
-    <form class="global-form-container" v-on:submit.prevent="createProvider">
+    <form class="global-form-container" v-on:submit.prevent="registerSurvey">
       <div class="register-form">
-        <div class="input-container">
-          <label for="id" class="input-container__label">ID</label>
-          <input
-            type="text"
-            class="input-container__input"
-            name="id"
-            id="id"
-            required
-            v-model="id"
-          />
-        </div>
         <div class="input-container">
           <label for="document" class="input-container__label">Documento</label>
           <input
@@ -22,7 +11,7 @@
             name="document"
             id="document"
             required
-            v-model="document"
+            v-model="survey.document"
           />
         </div>
         <div class="input-container">
@@ -34,10 +23,10 @@
             name="question_one"
             id="question_one"
             required
-            v-model="question_one"
+            v-model="survey.question_one"
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
         <div class="input-container">
@@ -50,10 +39,10 @@
             name="question_two"
             id="question_two"
             required
-            v-model="question_two"
+            v-model="survey.question_two"
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
         <div class="input-container">
@@ -65,10 +54,10 @@
             name="question_three"
             id="question_three"
             required
-            v-model="question_three"
+            v-model="survey.question_three"
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
         <div class="input-container">
@@ -81,10 +70,10 @@
             name="question_four"
             id="question_four"
             required
-            v-model="question_four"
+            v-model="survey.question_four"
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
         <div class="input-container">
@@ -97,10 +86,10 @@
             name="question_five"
             id="question_five"
             required
-            v-model="question_five"
+            v-model="survey.question_five"
           >
-            <option value="Si">Si</option>
-            <option value="No">No</option>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
       </div>
@@ -112,13 +101,11 @@
 </template>
 <script>
 import gql from "graphql-tag";
-import jwt_decode from "jwt-decode";
 export default {
   name: "registroEncuestas",
   data: function () {
     return {
       survey: {
-        id: "",
         document: "",
         question_one: "",
         question_two: "",
@@ -129,28 +116,34 @@ export default {
     };
   },
   methods: {
-    createSurvey: function () {
-      let userToken = localStorage.getItem("token_access");
-      let userId = jwt_decode(userToken).user_id.toString();
-
-      axios
-        .post(
-          `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`,
-          this.survey,
-          {
-            headers: { Authorization: `Bearer ${userToken}` },
+    registerSurvey: async function(){
+      this.survey.question_one = this.survey.question_one === "true";
+      this.survey.question_two = this.survey.question_two === "true";
+      this.survey.question_three = this.survey.question_three === "true";
+      this.survey.question_four = this.survey.question_four === "true";
+      this.survey.question_five = this.survey.question_five === "true";
+      await this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($survey: SurveyInput!) {
+            createSurvey(survey: $survey) {
+              id
+              document
+            }
           }
-        )
-        .then((result) => {
-          alert("Encuesta creado con éxito");
-          this.clearData();
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Falló creación de encuesta");
-        });
+        `,
+        variables: {
+          survey: this.survey
+        },
+      })
+      .then(res => {
+        alert(`Se subio la encuesta con id ${res.data.createSurvey.id} para el afiliado con documento ${res.data.createSurvey.document}`)
+      })
+      .catch(err => {
+        alert("Hubo un error");
+        console.log(err)
+      })
     },
-
     clearData: function () {
       this.survey.id = "";
       this.survey.document = "";
