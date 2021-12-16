@@ -1,41 +1,38 @@
 <template>
   <div>
-    <h1 class="form-title">Consulta encuesta por documento</h1>
-    <form class="global-form-container">
-      <div class="register-form">
-        <div class="input-container">
-          <label for="search" class="input-container__label">Documento</label>
+    <h1 class="form-title">Encuestas</h1>
+    <form action="" class="search-form">
+      <div class="flex">
+        <div class="input-container input-container--search">
+          <label for="search" class="input-container__label">Buscar</label>
           <input
-            type="number"
+            type="text"
             class="input-container__input"
             name="search"
             id="search"
             required
-            maxlength="40"
+            v-model="filterSurveysInput"
           />
+          <small>Buscar por documento</small>
         </div>
+        <button v-on:click="filterSurveys" class="primary-btn primary-btn--search">Filtrar</button>
       </div>
-
-      <button type="submit" class="primary-btn primary-btn--margin">
-        Buscar
-      </button>
     </form>
   </div>
   <br />
   <div>
-    <h1>Encuestas</h1>
     <table class="scroll-table">
       <table class="table">
         <thead>
           <tr class="table__header">
             <th class="table__header-item">Id</th>
-            <th class="table__header-item">N° Documento</th>
+            <th class="table__header-item">N° Doc</th>
             <th class="table__header-item">Pregunta N° 1</th>
             <th class="table__header-item">Pregunta N° 2</th>
             <th class="table__header-item">Pregunta N° 3</th>
             <th class="table__header-item">Pregunta N° 4</th>
             <th class="table__header-item">Pregunta N° 5</th>
-            <th class="table__header-item">Acciones</th>
+            <th class="table__header-item"></th>
           </tr>
         </thead>
         <tbody class="table__body">
@@ -73,18 +70,17 @@
         </tbody>
       </table>
     </table>
-    <!-- <input type="number" v-model="search" placeholder="search" /> -->
-    <ModalEditSurvey
+    <ModalEditProduct
       v-show="isModalVisible"
       @close="closeModal"
-      v-bind="editSurvey"
+      v-bind="editSurveys"
     >
-    </ModalEditSurvey>
+    </ModalEditProduct>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
-      @delete-element="deleteSurvey"
-      :idElement="deleteSurveyId"
+      @delete-item="deleteSurvey"
+      :idItem="deleteSurveysId"
     ></ConfirmationModal>
   </div>
 </template>

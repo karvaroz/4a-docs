@@ -8,7 +8,7 @@
         aria-describedby="modalDescription"
       >
         <header class="modal-header" id="modalTitle">
-          <slot name="header"> Editar Afiliado No. {{ id }} </slot>
+          <slot name="header"> Editar Afiliado No. {{ document }} </slot>
           <button
             type="button"
             class="close-btn"
@@ -185,7 +185,21 @@ export default {
   },
 
   methods: {
+    setDataAffiliate: function () {
+      this.affiliateUpdated.id = this.id;
+      this.affiliateUpdated.name = this.name;
+      this.affiliateUpdated.lastname = this.lastname;
+      this.affiliateUpdated.document = this.document;
+      this.affiliateUpdated.document_number = this.document_number;
+      this.affiliateUpdated.email = this.email;
+      this.affiliateUpdated.phone = this.phone;
+      this.affiliateUpdated.city = this.city;
+      this.affiliateUpdated.address = this.address;
+    },
     updateAffiliate: async function () {
+      let affiliateId = this.id.toString();
+      this.setDataAffiliate();
+
       await this.$apollo
         .mutate({
           mutation: gql`
@@ -219,45 +233,6 @@ export default {
           alert("Falló actualización de afiliado");
         });
     },
-
-    // close() {
-    //   this.$emit("close");
-    // },
-    // setDataAffiliate: function () {
-    //   this.affiliateUpdated.id = this.id;
-    //   this.affiliateUpdated.name = this.name;
-    //   this.affiliateUpdated.lastname = this.lastname;
-    //   this.affiliateUpdated.document = this.document;
-    //   this.affiliateUpdated.document_number = this.document_number;
-    //   this.affiliateUpdated.email = this.email;
-    //   this.affiliateUpdated.phone = this.phone;
-    //   this.affiliateUpdated.city = this.city;
-    //   this.affiliateUpdated.address = this.address;
-    // },
-    // affiliateUpdated: function () {
-    //   let userToken = localStorage.getItem("token_access");
-    //   let userId = jwt_decode(userToken).user_id.toString();
-    //   let affiliateId = this.id.toString();
-    //   this.setDataAffiliate();
-
-    //   axios
-    //     .put(
-    //       `https://affiliates-ms-be.herokuapp.com/user/${userId}/affiliates/${affiliateId}`,
-    //       this.affiliateUpdated,
-    //       {
-    //         headers: { Authorization: `Bearer ${userToken}` },
-    //       }
-    //     )
-    // .then((result) => {
-    //   console.log(result);
-    //   alert("Afiliado actualizado con éxito");
-    //   this.$emit("close");
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    //   alert("Falló actualización de afiliado");
-    // });
-    // },
   },
 };
 </script>

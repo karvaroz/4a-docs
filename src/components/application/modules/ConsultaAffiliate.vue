@@ -1,30 +1,27 @@
 <template>
   <div>
-    <h1 class="form-title">Consulta afiliado por documento</h1>
-    <form class="global-form-container">
-      <div class="register-form">
-        <div class="input-container">
-          <label for="search" class="input-container__label">Documento</label>
+    <h1 class="form-title">Afiliados</h1>
+    <form action="" class="search-form">
+      <div class="flex">
+        <div class="input-container input-container--search">
+          <label for="search" class="input-container__label">Buscar</label>
           <input
-            type="number"
+            type="text"
             class="input-container__input"
             name="search"
             id="search"
             required
-            maxlength="40"
+            v-model="filterAffiliatesInput"
           />
+          <small>Buscar por documento</small>
         </div>
+        <button v-on:click="filterAffiliates" class="primary-btn primary-btn--search">Filtrar</button>
       </div>
-
-      <button type="submit" class="primary-btn primary-btn--margin">
-        Buscar
-      </button>
     </form>
   </div>
   <br />
 
   <div>
-    <h1>Afiliados</h1>
     <div class="scroll-table">
       <table class="table">
         <thead>
@@ -32,13 +29,13 @@
             <th class="table__header-item">Id</th>
             <th class="table__header-item">Nombres</th>
             <th class="table__header-item">Apellidos</th>
-            <th class="table__header-item">Tipo Documento</th>
-            <th class="table__header-item">N° Documento</th>
+            <th class="table__header-item">Tipo Doc</th>
+            <th class="table__header-item">N° Doc</th>
             <th class="table__header-item">Email</th>
             <th class="table__header-item">Celular</th>
             <th class="table__header-item">Ciudad</th>
             <th class="table__header-item">Dirección</th>
-            <th class="table__header-item">Acciones</th>
+            <th class="table__header-item"></th>
           </tr>
         </thead>
         <tbody class="table__body">
@@ -53,7 +50,9 @@
             <td class="table__body-item">{{ affiliate.city }}</td>
             <td class="table__body-item">{{ affiliate.address }}</td>
             <td class="table__body-item">
-              <button class="edit-btn" @click="openEditModal(index)"></button>
+              <button type="button" class="edit-btn" @click="openEditModal(index)">
+                <ges-icon icon="edit" size="lg"></ges-icon>
+              </button>
               <button
                 type="button"
                 class="close-btn"
@@ -66,17 +65,17 @@
         </tbody>
       </table>
     </div>
-    <ModalEditAffiliate
+    <ModalEditProduct
       v-show="isModalVisible"
       @close="closeModal"
       v-bind="editAffiliate"
     >
-    </ModalEditAffiliate>
+    </ModalEditProduct>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
-      @delete-element="deleteAffiliate"
-      :idElement="deleteAffiliateId"
+      @delete-item="deleteProduct"
+      :idItem="deleteAffiliateId"
     ></ConfirmationModal>
   </div>
 </template>

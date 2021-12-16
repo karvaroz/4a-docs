@@ -46,17 +46,17 @@ export default {
   name: "ConfirmationModal",
   data: function () {
     return {
-      idDeleteElement: "",
+      idDeleteItem: "",
     };
   },
-  props: ["idElement"],
+  props: ["idItem"],
   methods: {
     close() {
       this.$emit("close");
     },
-    deleteElement() {
-      this.idDeleteElement = this.idElement;
-      this.$emit("delete-element", this.idDeleteElement);
+    deleteItem() {
+      this.idDeleteItem = this.idItem;
+      this.$emit("delete-item", this.idDeleteItem);
       this.close()
     },
   },

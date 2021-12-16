@@ -144,7 +144,9 @@ export default {
         },
       })
       .then(res => {
-        alert(`Se creo el afiliado ${res.data.createSurvey.name} con documento ${res.data.createSurvey.document_number}`)
+        alert("Se creo el afiliado")
+        console.log(res);
+        this.clearData()
       })
       .catch(err => {
         alert("Hubo un error");
