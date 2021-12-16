@@ -148,65 +148,65 @@ export default {
       `,
     },
   },
-  // methods: {
-  //   openEditModal(surveyId) {
-  //     this.isModalVisible = true;
-  //     this.editSurveys = this.getAllSurveys[surveyId];
-  //   },
-  //   closeModal() {
-  //     this.isModalVisible = false;
-  //     this.getAllSurveys();
-  //   },
-  //   closeConfirmationModal() {
-  //     this.isConfirmationModalVisible = false;
-  //   },
-  //   openConfirmationModal(surveyId) {
-  //     this.isConfirmationModalVisible = true;
-  //     this.deleteSurveysId = surveyId;
-  //   },
+  methods: {
+    openEditModal(surveyId) {
+      this.isModalVisible = true;
+      this.editSurveys = this.getAllSurveys[surveyId];
+    },
+    closeModal() {
+      this.isModalVisible = false;
+      this.getAllSurveys();
+    },
+    closeConfirmationModal() {
+      this.isConfirmationModalVisible = false;
+    },
+    openConfirmationModal(surveyId) {
+      this.isConfirmationModalVisible = true;
+      this.deleteSurveysId = surveyId;
+    },
 
-  //   deleteSurvey(deleteSurveysId) {
-  //     // let userToken = localStorage.getItem("token_access");
-  //     // let userId = jwt_decode(userToken).user_id.toString();
-  //     let surveyId = this.getAllSurveys[deleteSurveysId].id;
-  //     this.$apollo.mutate({
-  //       mutation: gql`
-  //         mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
-  //           deleteSurveyById(id: $deleteSurveyByIdId)
-  //         }
-  //       `,
-  //       variables: {
-  //         deleteSurveyByIdId: surveyId,
-  //       },
-  //     });
-  //   },
-  // },
+    deleteSurvey(deleteSurveysId) {
+      // let userToken = localStorage.getItem("token_access");
+      // let userId = jwt_decode(userToken).user_id.toString();
+      let surveyId = this.getAllSurveys[deleteSurveysId].id;
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
+            deleteSurveyById(id: $deleteSurveyByIdId)
+          }
+        `,
+        variables: {
+          deleteSurveyByIdId: surveyId,
+        },
+      });
+    },
+  },
 
-  // filterSurveysInput(surveysByDocument) {
-  //   let surveyDocument = this.getAllSurveys[surveysByDocument].document;
-  //   this.$apollo.mutate({
-  //     mutation: gql`
-  //       query SurveysByDocument($document: Int!) {
-  //         surveysByDocument(document: $document) {
-  //           id
-  //           document
-  //           question_one
-  //           question_two
-  //           question_three
-  //           question_four
-  //           question_five
-  //         }
-  //       }
-  //     `,
-  //     variables() {
-  //       return {
-  //         surveysByDocument: surveyDocument,
-  //       };
-  //     },
-  //   });
-  // },
-  //   created: function () {
-  //   this.$apollo.queries.surveysByDocument.refetch();
-  // },
+  filterSurveysInput(surveysByDocument) {
+    let surveyDocument = this.getAllSurveys[surveysByDocument].document;
+    this.$apollo.mutate({
+      mutation: gql`
+        query SurveysByDocument($document: Int!) {
+          surveysByDocument(document: $document) {
+            id
+            document
+            question_one
+            question_two
+            question_three
+            question_four
+            question_five
+          }
+        }
+      `,
+      variables() {
+        return {
+          surveysByDocument: surveyDocument,
+        };
+      },
+    });
+  },
+    created: function () {
+    this.$apollo.queries.surveysByDocument.refetch();
+  },
 };
 </script>

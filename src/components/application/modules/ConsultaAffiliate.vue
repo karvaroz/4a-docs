@@ -150,66 +150,66 @@ export default {
       `,
     },
   },
-  // methods: {
-  //   openEditModal(affiliateId) {
-  //     this.isModalVisible = true;
-  //     this.editAffiliate = this.allAffiliates[affiliateId];
-  //   },
-  //   closeModal() {
-  //     this.isModalVisible = false;
-  //     this.allAffiliates();
-  //   },
-  //   closeConfirmationModal() {
-  //     this.isConfirmationModalVisible = false;
-  //   },
-  //   openConfirmationModal(affiliateId) {
-  //     this.isConfirmationModalVisible = true;
-  //     this.deleteAffiliateId = affiliateId;
-  //   },
+  methods: {
+    openEditModal(affiliateId) {
+      this.isModalVisible = true;
+      this.editAffiliate = this.allAffiliates[affiliateId];
+    },
+    closeModal() {
+      this.isModalVisible = false;
+      this.allAffiliates();
+    },
+    closeConfirmationModal() {
+      this.isConfirmationModalVisible = false;
+    },
+    openConfirmationModal(affiliateId) {
+      this.isConfirmationModalVisible = true;
+      this.deleteAffiliateId = affiliateId;
+    },
 
-  //   deleteAffiliate(deleteAffiliateId) {
-  //     // let userToken = localStorage.getItem("token_access");
-  //     // let userId = jwt_decode(userToken).user_id.toString();
-  //     let affiliateId = this.allAffiliates[deleteAffiliateId].id;
-  //     this.$apollo.mutate({
-  //       mutation: gql`
-  //         mutation Mutation($affiliateId: ID!) {
-  //           deleteAffiliate(affiliateID: $affiliateId)
-  //         }
-  //       `,
-  //       variables: {
-  //         affiliateId: affiliateId,
-  //       },
-  //     });
-  //   },
-  // },
+    deleteAffiliate(deleteAffiliateId) {
+      // let userToken = localStorage.getItem("token_access");
+      // let userId = jwt_decode(userToken).user_id.toString();
+      let affiliateId = this.allAffiliates[deleteAffiliateId].id;
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation Mutation($affiliateId: ID!) {
+            deleteAffiliate(affiliateID: $affiliateId)
+          }
+        `,
+        variables: {
+          affiliateId: affiliateId,
+        },
+      });
+    },
+  },
 
-  // filterAffiliatesInput(affiliatesByDocument_number) {
-  //   let affiliateDocument =
-  //     this.allAffiliates[affiliatesByDocument_number].document;
-  //   this.$apollo.mutate({
-  //     mutation: gql`
-  //       query SurveysByDocument($document: Int!) {
-  //         surveysByDocument(document: $document) {
-  //           id
-  //           document
-  //           question_one
-  //           question_two
-  //           question_three
-  //           question_four
-  //           question_five
-  //         }
-  //       }
-  //     `,
-  //     variables() {
-  //       return {
-  //         documentNumber: affiliateDocument,
-  //       };
-  //     },
-  //   });
-  // },
-  // created: function () {
-  //   this.$apollo.queries.affiliatesByDocument_number.refetch();
-  // },
+  filterAffiliatesInput(affiliatesByDocument_number) {
+    let affiliateDocument =
+      this.allAffiliates[affiliatesByDocument_number].document;
+    this.$apollo.mutate({
+      mutation: gql`
+        query SurveysByDocument($document: Int!) {
+          surveysByDocument(document: $document) {
+            id
+            document
+            question_one
+            question_two
+            question_three
+            question_four
+            question_five
+          }
+        }
+      `,
+      variables() {
+        return {
+          documentNumber: affiliateDocument,
+        };
+      },
+    });
+  },
+  created: function () {
+    this.$apollo.queries.affiliatesByDocument_number.refetch();
+  },
 };
 </script>
