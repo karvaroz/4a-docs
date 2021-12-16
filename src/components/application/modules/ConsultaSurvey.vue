@@ -70,12 +70,12 @@
         </tbody>
       </table>
     </table>
-    <ModalEditProduct
+    <ModalEditSurvey
       v-show="isModalVisible"
       @close="closeModal"
       v-bind="editSurveys"
     >
-    </ModalEditProduct>
+    </ModalEditSurvey>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"

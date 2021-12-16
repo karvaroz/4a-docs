@@ -199,56 +199,21 @@ export default {
         });
     },
 
-    // close() {
-    //   this.$emit("close");
-    // },
+    close() {
+      this.$emit("close");
+    },
 
-    // getSurveys: function () {
-    //   let userToken = localStorage.getItem("token_access");
-    //   let userId = jwt_decode(userToken).user_id.toString();
-    //   axios
-    //     .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
-    //       headers: { Authorization: `Bearer ${userToken}` },
-    //     })
-    //     .then((result) => {
-    //       this.surveys = result.data;
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
 
-    // setDataSurvey: function () {
-    //   this.surveyUpdated.id = this.id;
-    //   this.surveyUpdated.document = this.document;
-    //   this.surveyUpdated.question_one = this.question_one;
-    //   this.surveyUpdated.question_two = this.question_two;
-    //   this.surveyUpdated.question_three = this.question_three;
-    //   this.surveyUpdated.question_four = this.question_four;
-    //   this.surveyUpdated.question_five = this.question_five;
-    // },
-    // updateSurvey: function () {
-    //   let userToken = localStorage.getItem("token_access");
-    //   let userId = jwt_decode(userToken).user_id.toString();
-    //   let surveyId = this.document;
-    //   this.setDataSurvey();
-    //   axios
-    //     .put(
-    //       `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
-    //       this.surveyUpdated,
-    //       {
-    //         headers: { Authorization: `Bearer ${userToken}` },
-    //       }
-    //     )
-    // .then((result) => {
-    //   alert("Encuesta editada con éxito");
-    //   this.$emit("close");
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    //   alert("Falló edición de encuesta");
-    // });
-    // },
+    setDataSurvey: function () {
+      this.surveyUpdated.id = this.id;
+      this.surveyUpdated.document = this.document;
+      this.surveyUpdated.question_one = this.question_one;
+      this.surveyUpdated.question_two = this.question_two;
+      this.surveyUpdated.question_three = this.question_three;
+      this.surveyUpdated.question_four = this.question_four;
+      this.surveyUpdated.question_five = this.question_five;
+    },
+
   },
 };
 </script>

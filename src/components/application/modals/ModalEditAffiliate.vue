@@ -8,7 +8,7 @@
         aria-describedby="modalDescription"
       >
         <header class="modal-header" id="modalTitle">
-          <slot name="header"> Editar Afiliado No. {{ document }} </slot>
+          <slot name="header"> Editar Afiliado No. {{ document_number }} </slot>
           <button
             type="button"
             class="close-btn"
@@ -74,7 +74,7 @@
               >
                 <option disabled>Seleccione</option>
                 <option v-for="tipo in document" :key="tipo">
-                  {{ tipo.document }}
+                  {{ tipo }}
                 </option>
               </select>
             </div>
@@ -85,10 +85,11 @@
               <input
                 type="number"
                 class="input-container__input"
-                name="price"
-                id="price"
+                name="document_number"
+                id="document_number"
                 required
-                v-model="price"
+                v-model="document_number"
+                disabled
               />
             </div>
             <div class="input-container">
@@ -163,28 +164,32 @@ export default {
         id: "",
         name: "",
         lastname: "",
-        document: [],
+        document: "",
         document_number: "",
         email: "",
         phone: "",
         city: "",
         address: "",
       },
+      document: ["CC", "TI", "RC", "OT"],
     };
   },
   props: {
     id: "",
     name: "",
     lastname: "",
-    document: [],
+    document: "",
     document_number: "",
-    email: 0,
+    email: "",
     phone: "",
     city: "",
     address: "",
   },
 
   methods: {
+    close() {
+      this.$emit("close");
+    },
     setDataAffiliate: function () {
       this.affiliateUpdated.id = this.id;
       this.affiliateUpdated.name = this.name;

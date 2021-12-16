@@ -65,12 +65,12 @@
         </tbody>
       </table>
     </div>
-    <ModalEditProduct
+    <ModalEditAffiliate
       v-show="isModalVisible"
       @close="closeModal"
       v-bind="editAffiliate"
     >
-    </ModalEditProduct>
+    </ModalEditAffiliate>
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"

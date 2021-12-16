@@ -112,7 +112,7 @@ export default {
   methods: {
     logOut: function () {
       localStorage.clear();
-      this.$router.push({ name: "logIn" });
+      this.$router.push({ name: "homePage" });
     },
   },
 };
