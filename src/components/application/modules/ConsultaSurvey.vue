@@ -1,6 +1,29 @@
 <template>
   <div>
-    <h1>Consulta de encuestas</h1>
+    <h1 class="form-title">Consulta encuesta por documento</h1>
+    <form class="global-form-container">
+      <div class="register-form">
+        <div class="input-container">
+          <label for="search" class="input-container__label">Documento</label>
+          <input
+            type="number"
+            class="input-container__input"
+            name="search"
+            id="search"
+            required
+            maxlength="40"
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="primary-btn primary-btn--margin">
+        Buscar
+      </button>
+    </form>
+  </div>
+  <br />
+  <div>
+    <h1>Encuestas</h1>
     <table class="scroll-table">
       <table class="table">
         <thead>
@@ -12,23 +35,31 @@
             <th class="table__header-item">Pregunta N° 3</th>
             <th class="table__header-item">Pregunta N° 4</th>
             <th class="table__header-item">Pregunta N° 5</th>
+            <th class="table__header-item">Acciones</th>
           </tr>
         </thead>
         <tbody class="table__body">
           <tr v-for="(survey, index) in getAllSurveys" :key="index">
             <td class="table__body-item">{{ survey.id }}</td>
             <td class="table__body-item">{{ survey.document }}</td>
-            <td class="table__body-item">{{ survey.question_one ? "sí": "no" }}</td>
-            <td class="table__body-item">{{ survey.question_two ? "sí": "no" }}</td>
-            <td class="table__body-item">{{ survey.question_three ? "sí": "no" }}</td>
-            <td class="table__body-item">{{ survey.question_four ? "sí": "no" }}</td>
-            <td class="table__body-item">{{ survey.question_five ? "sí": "no" }}</td>
             <td class="table__body-item">
-              <button class="edit-btn" @click="openEditSurveyModal(index)">
+              {{ survey.question_one ? "sí" : "no" }}
+            </td>
+            <td class="table__body-item">
+              {{ survey.question_two ? "sí" : "no" }}
+            </td>
+            <td class="table__body-item">
+              {{ survey.question_three ? "sí" : "no" }}
+            </td>
+            <td class="table__body-item">
+              {{ survey.question_four ? "sí" : "no" }}
+            </td>
+            <td class="table__body-item">
+              {{ survey.question_five ? "sí" : "no" }}
+            </td>
+            <td class="table__body-item">
+              <button class="edit-btn" @click="openEditModal(index)">
                 <ges-icon icon="edit" size="lg"></ges-icon>
-              </button>
-              <button type="button" class="close-btn">
-                <ges-icon size="lg" icon="trash-alt"></ges-icon>
               </button>
               <button
                 type="button"
@@ -42,6 +73,7 @@
         </tbody>
       </table>
     </table>
+    <!-- <input type="number" v-model="search" placeholder="search" /> -->
     <ModalEditSurvey
       v-show="isModalVisible"
       @close="closeModal"
@@ -66,7 +98,7 @@ export default {
     ModalEditSurvey,
     ConfirmationModal,
   },
-data: function (){
+  data: function () {
     return {
       survey: {
         id: "",
@@ -103,72 +135,78 @@ data: function (){
     surveysByDocument: {
       query: gql`
         query surveysByDocument($documentNumber: Int!) {
-            surveysByDocument(document: $document) {
-              id
-              document
-              question_one
-              question_two
-              question_three
-              question_four
-              question_five
-            }
+          surveysByDocument(document: $document) {
+            id
+            document
+            question_one
+            question_two
+            question_three
+            question_four
+            question_five
+          }
         }
       `,
     },
   },
   // methods: {
-  //   getSurveys: function () {
-  //     let userToken = localStorage.getItem("token_access");
-  //     let userId = jwt_decode(userToken).user_id.toString();
-  //     axios
-  //       .get(`https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys`, {
-  //         headers: { Authorization: `Bearer ${userToken}` },
-  //       })
-  //       .then((result) => {
-  //         this.surveys = result.data;
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
+  //   openEditModal(surveyId) {
+  //     this.isModalVisible = true;
+  //     this.editSurveys = this.getAllSurveys[surveyId];
   //   },
   //   closeModal() {
   //     this.isModalVisible = false;
-  //     this.getSurveys();
+  //     this.getAllSurveys();
   //   },
-
   //   closeConfirmationModal() {
   //     this.isConfirmationModalVisible = false;
   //   },
-
   //   openConfirmationModal(surveyId) {
   //     this.isConfirmationModalVisible = true;
-  //     this.deleteSurveyId = surveyId;
+  //     this.deleteSurveysId = surveyId;
   //   },
 
-  //   deleteSurvey(surveyIdDelete) {
-  //     let userToken = localStorage.getItem("token_access");
-  //     let userId = jwt_decode(userToken).user_id.toString();
-  //     let surveyId = this.surveys[surveyIdDelete].document;
-  //     axios
-  //       .delete(
-  //         `https://eps-surveys-ms.herokuapp.com/user/${userId}/surveys/${surveyId}`,
-  //         {
-  //           headers: { Authorization: `Bearer ${userToken}` },
+  //   deleteSurvey(deleteSurveysId) {
+  //     // let userToken = localStorage.getItem("token_access");
+  //     // let userId = jwt_decode(userToken).user_id.toString();
+  //     let surveyId = this.getAllSurveys[deleteSurveysId].id;
+  //     this.$apollo.mutate({
+  //       mutation: gql`
+  //         mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
+  //           deleteSurveyById(id: $deleteSurveyByIdId)
   //         }
-  //       )
-  //       .then((result) => {
-  //         alert("Encuesta eliminada con éxito");
-  //         this.getSurveys();
-  //         this.closeModal();
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         alert("Falló eliminación de encuesta");
-  //       });
+  //       `,
+  //       variables: {
+  //         deleteSurveyByIdId: surveyId,
+  //       },
+  //     });
   //   },
   // },
-  // beforeMount() {
-  //   this.getSurveys();
+
+  // filterSurveysInput(surveysByDocument) {
+  //   let surveyDocument = this.getAllSurveys[surveysByDocument].document;
+  //   this.$apollo.mutate({
+  //     mutation: gql`
+  //       query SurveysByDocument($document: Int!) {
+  //         surveysByDocument(document: $document) {
+  //           id
+  //           document
+  //           question_one
+  //           question_two
+  //           question_three
+  //           question_four
+  //           question_five
+  //         }
+  //       }
+  //     `,
+  //     variables() {
+  //       return {
+  //         surveysByDocument: surveyDocument,
+  //       };
+  //     },
+  //   });
+  // },
+  //   created: function () {
+  //   this.$apollo.queries.surveysByDocument.refetch();
   // },
 };
 </script>
