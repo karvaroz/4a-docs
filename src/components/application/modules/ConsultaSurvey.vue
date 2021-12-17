@@ -37,7 +37,7 @@
             <th class="table__header-item">Pregunta N° 3</th>
             <th class="table__header-item">Pregunta N° 4</th>
             <th class="table__header-item">Pregunta N° 5</th>
-            <th class="table__header-item"></th>
+            <th class="table__header-item">Acciones</th>
           </tr>
         </thead>
         <tbody class="table__body">

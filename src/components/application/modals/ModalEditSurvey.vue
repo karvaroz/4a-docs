@@ -8,7 +8,7 @@
         aria-describedby="modalDescription"
       >
         <header class="modal-header" id="modalTitle">
-          <slot name="header"> Editar encuesta {{ id }} </slot>
+          <slot name="header"> Detalle encuesta No. {{ document }} </slot>
           <button
             type="button"
             class="close-btn"
@@ -50,85 +50,80 @@
               <label for="question_one" class="input-contailer__label"
                 >¿Ha sufrido de covid-19?</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="question_one"
                 id="question_one"
                 required
                 v-model="question_one"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
+                disabled
+              />
             </div>
             <div class="input-container">
               <label for="question_two" class="input-contailer__label"
                 >¿Ha estado en contacto con personas que han sufrido de
                 covid-19?</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="question_two"
                 id="question_two"
                 required
                 v-model="question_two"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
+                disabled
+              />
             </div>
             <div class="input-container">
               <label for="question_three" class="input-contailer__label"
                 >¿Ha tenido temperatura mayor a 37° grados?</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="question_three"
                 id="question_three"
                 required
                 v-model="question_three"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
+                disabled
+              />
             </div>
             <div class="input-container">
               <label for="question_four" class="input-contailer__label"
                 >¿Ha tenido dificultad para respirar durante la última
                 semana?</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="question_four"
                 id="question_four"
                 required
                 v-model="question_four"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
+                disabled
+              />
             </div>
             <div class="input-container">
               <label for="question_five" class="input-contailer__label"
                 >¿Se ha sentido más cansado que de costumbre durante la última
                 semana?</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="question_five"
                 id="question_five"
                 required
                 v-model="question_five"
-              >
-                <option value="Si">Si</option>
-                <option value="No">No</option>
-              </select>
+                disabled
+              />
             </div>
           </div>
           <div class="buttons-container">
-            <button class="primary-btn primary-btn--margin" type="submit">
+            <!-- <button class="primary-btn primary-btn--margin" type="submit">
               Actualizar encuesta
-            </button>
+            </button> -->
             <button class="cancel-btn" v-on:click="close" type="button">
               Cancelar
             </button>

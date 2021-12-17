@@ -8,7 +8,9 @@
         aria-describedby="modalDescription"
       >
         <header class="modal-header" id="modalTitle">
-          <slot name="header"> Editar Afiliado No. {{ document_number }} </slot>
+          <slot name="header">
+            Detalle Afiliado No. {{ document_number }}
+          </slot>
           <button
             type="button"
             class="close-btn"
@@ -45,6 +47,7 @@
                 required
                 v-model="name"
                 maxlength="40"
+                disabled
               />
             </div>
             <div class="input-container">
@@ -59,25 +62,25 @@
                 required
                 v-model="lastname"
                 maxlength="40"
+                disabled
               />
             </div>
             <div class="input-container">
               <label for="document" class="input-container__label"
                 >Tipo Documento</label
               >
-              <select
+              <input
+                type="text"
                 class="input-container__input"
                 name="document"
                 id="document"
                 required
                 v-model="document"
-              >
-                <option disabled>Seleccione</option>
-                <option v-for="tipo in document" :key="tipo">
-                  {{ tipo }}
-                </option>
-              </select>
+                maxlength="40"
+                disabled
+              />
             </div>
+
             <div class="input-container">
               <label for="document_number" class="input-container__label"
                 >Número Document</label
@@ -101,6 +104,7 @@
                 id="email"
                 required
                 v-model="email"
+                disabled
               />
             </div>
             <div class="input-container">
@@ -112,10 +116,11 @@
                 id="phone"
                 required
                 v-model="phone"
+                disabled
               />
             </div>
             <div class="input-container">
-              <label for="city" class="input-container__label">Celular</label>
+              <label for="city" class="input-container__label">Ciudad</label>
               <input
                 type="text"
                 class="input-container__input"
@@ -123,11 +128,12 @@
                 id="city"
                 required
                 v-model="city"
+                disabled
               />
             </div>
             <div class="input-container">
               <label for="address" class="input-container__label"
-                >Celular</label
+                >Dirección</label
               >
               <input
                 type="text"
@@ -136,13 +142,18 @@
                 id="address"
                 required
                 v-model="address"
+                disabled
               />
             </div>
           </div>
-          <button type="submit" class="primary-btn primary-btn--margin">
+          <!-- <button type="submit" class="primary-btn primary-btn--margin">
             Actualizar afiliado
-          </button>
-          <button class="cancel-btn" @click="close" type="button">
+          </button> -->
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
+            class="cancel-btn"
+            @click="close"
+            type="button"
+          >
             Cancelar
           </button>
         </form>
@@ -205,8 +216,7 @@ export default {
       this.setDataAffiliate();
       await this.$apollo
         .mutate({
-          mutation: gql`
-        `,
+          mutation: gql``,
           variables: {
             afiliado: this.affiliateUpdated,
           },

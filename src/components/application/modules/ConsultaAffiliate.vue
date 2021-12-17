@@ -40,7 +40,7 @@
             <th class="table__header-item">Celular</th>
             <th class="table__header-item">Ciudad</th>
             <th class="table__header-item">Dirección</th>
-            <th class="table__header-item"></th>
+            <th class="table__header-item">Acciones</th>
           </tr>
         </thead>
         <tbody class="table__body">
