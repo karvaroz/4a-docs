@@ -202,27 +202,10 @@ export default {
       this.affiliateUpdated.address = this.address;
     },
     updateAffiliate: async function () {
-      let affiliateId = this.id.toString();
       this.setDataAffiliate();
-
       await this.$apollo
         .mutate({
           mutation: gql`
-          mutation (affiliateInput: $affiliateInput) {
-             createAffiliate(affiliateInput: $affiliateInput) {
-              id
-              name
-              lastname
-              document
-              document_number
-              email
-              phone
-              city
-              address
-              created
-              updated
-            }
-          }
         `,
           variables: {
             afiliado: this.affiliateUpdated,

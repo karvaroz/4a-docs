@@ -166,7 +166,7 @@ export default {
       this.deleteSurveysId = surveyId;
     },
 
-    deleteSurvey: async function () {
+    deleteSurveysId: async function () {
       await this.$apollo
         .mutate({
           mutation: gql`

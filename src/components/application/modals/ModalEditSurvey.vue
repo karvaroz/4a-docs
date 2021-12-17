@@ -172,17 +172,7 @@ export default {
       await this.$apollo
         .mutate({
           mutation: gql`
-            mutation ($surveyInput: SurveyInput!) {
-              createSurvey(surveyInput: $surveyInput) {
-                id
-                document
-                question_one
-                question_two
-                question_three
-                question_four
-                question_five
-              }
-            }
+
           `,
           variables: {
             encuesta: this.surveyUpdated,
