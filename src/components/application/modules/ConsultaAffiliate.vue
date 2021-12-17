@@ -15,7 +15,12 @@
           />
           <small>Buscar por documento</small>
         </div>
-        <button v-on:click="filterAffiliates" class="primary-btn primary-btn--search">Filtrar</button>
+        <button
+          v-on:click="filterAffiliates"
+          class="primary-btn primary-btn--search"
+        >
+          Filtrar
+        </button>
       </div>
     </form>
   </div>
@@ -50,7 +55,11 @@
             <td class="table__body-item">{{ affiliate.city }}</td>
             <td class="table__body-item">{{ affiliate.address }}</td>
             <td class="table__body-item">
-              <button type="button" class="edit-btn" @click="openEditModal(index)">
+              <button
+                type="button"
+                class="edit-btn"
+                @click="openEditModal(index)"
+              >
                 <ges-icon icon="edit" size="lg"></ges-icon>
               </button>
               <button
@@ -74,7 +83,7 @@
     <ConfirmationModal
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
-      @delete-item="deleteProduct"
+      @delete-item="deleteAffiliate"
       :idItem="deleteAffiliateId"
     ></ConfirmationModal>
   </div>
@@ -166,47 +175,61 @@ export default {
       this.deleteAffiliateId = affiliateId;
     },
 
-    deleteAffiliate(deleteAffiliateId) {
-      // let userToken = localStorage.getItem("token_access");
-      // let userId = jwt_decode(userToken).user_id.toString();
-      let affiliateId = this.allAffiliates[deleteAffiliateId].id;
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation Mutation($affiliateId: ID!) {
-            deleteAffiliate(affiliateID: $affiliateId)
-          }
-        `,
-        variables: {
-          affiliateId: affiliateId,
-        },
-      });
+    deleteAffiliate: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation DeleteAffiliate($affiliateId: ID!) {
+              deleteAffiliate(affiliateID: $affiliateId)
+            }
+          `,
+          variables: {
+            affiliateId: this.affiliateId,
+          },
+        })
+        .then((res) => {
+          alert("Se eliminó el afiliado");
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("Hubo un error");
+          console.log(err);
+        });
+    },
+
+    filterAffiliatesInput: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            query AffiliatesByDocument_number($documentNumber: String!) {
+              affiliatesByDocument_number(document_number: $documentNumber) {
+                id
+                name
+                lastname
+                document
+                document_number
+                email
+                phone
+                city
+                address
+              }
+            }
+          `,
+          variables: {
+            documentNumber: this.document_number,
+          },
+        })
+        .then((res) => {
+          alert("Se filtró exitosamente");
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("Hubo un error");
+          console.log(err);
+        });
     },
   },
 
-  filterAffiliatesInput(affiliatesByDocument_number) {
-    let affiliateDocument =
-      this.allAffiliates[affiliatesByDocument_number].document;
-    this.$apollo.mutate({
-      mutation: gql`
-        query SurveysByDocument($document: Int!) {
-          surveysByDocument(document: $document) {
-            id
-            document
-            question_one
-            question_two
-            question_three
-            question_four
-            question_five
-          }
-        }
-      `,
-      variables() {
-        return {
-          documentNumber: affiliateDocument,
-        };
-      },
-    });
-  },
   created: function () {
     this.$apollo.queries.affiliatesByDocument_number.refetch();
   },

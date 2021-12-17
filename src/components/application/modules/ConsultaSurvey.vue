@@ -15,7 +15,12 @@
           />
           <small>Buscar por documento</small>
         </div>
-        <button v-on:click="filterSurveys" class="primary-btn primary-btn--search">Filtrar</button>
+        <button
+          v-on:click="filterSurveys"
+          class="primary-btn primary-btn--search"
+        >
+          Filtrar
+        </button>
       </div>
     </form>
   </div>
@@ -161,47 +166,59 @@ export default {
       this.deleteSurveysId = surveyId;
     },
 
-    deleteSurvey(deleteSurveysId) {
-      // let userToken = localStorage.getItem("token_access");
-      // let userId = jwt_decode(userToken).user_id.toString();
-      let surveyId = this.getAllSurveys[deleteSurveysId].id;
-      this.$apollo.mutate({
-        mutation: gql`
-          mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
-            deleteSurveyById(id: $deleteSurveyByIdId)
-          }
-        `,
-        variables: {
-          deleteSurveyByIdId: surveyId,
-        },
-      });
+    deleteSurvey: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
+              deleteSurveyById(id: $deleteSurveyByIdId)
+            }
+          `,
+          variables: {
+            deleteSurveyByIdId: this.surveyId,
+          },
+        })
+        .then((res) => {
+          alert("Se eliminó encuesta");
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("Hubo un error");
+          console.log(err);
+        });
     },
   },
 
-  filterSurveysInput(surveysByDocument) {
-    let surveyDocument = this.getAllSurveys[surveysByDocument].document;
-    this.$apollo.mutate({
-      mutation: gql`
-        query SurveysByDocument($document: Int!) {
-          surveysByDocument(document: $document) {
-            id
-            document
-            question_one
-            question_two
-            question_three
-            question_four
-            question_five
+  filterSurveysInput: async function () {
+    await this.$apollo
+      .mutate({
+        mutation: gql`
+          query SurveysByDocument($document: Int!) {
+            surveysByDocument(document: $document) {
+              id
+              document
+              question_one
+              question_two
+              question_three
+              question_four
+              question_five
+            }
           }
-        }
-      `,
-      variables() {
-        return {
-          surveysByDocument: surveyDocument,
-        };
-      },
-    });
+        `,
+        variables: {
+          surveysByDocument: this.surveyDocument,
+        },
+      })
+      .then((res) => {
+        alert("Se filtró exitosamente");
+        console.log(res);
+      })
+      .catch((err) => {
+        alert("Hubo un error");
+        console.log(err);
+      });
   },
-    created: function () {
+  created: function () {
     this.$apollo.queries.surveysByDocument.refetch();
   },
 };
