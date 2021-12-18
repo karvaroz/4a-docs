@@ -1,5 +1,8 @@
 # 4a-docs
 
+Sistema  eps para la gestión de afiliados y encuestas covid-19
+
+
 ## Sprint 1
 ### Rama master
 - Se trabajó el diseño de la arquitectura y se seleccionó el problema a trabajar
