@@ -66,7 +66,7 @@
               <button
                 type="button"
                 class="close-btn"
-                @click="openConfirmationModal(index)"
+                @click="openConfirmationModal(survey.id)"
               >
                 <ges-icon size="lg" icon="trash-alt"></ges-icon>
               </button>
@@ -85,7 +85,7 @@
       v-show="isConfirmationModalVisible"
       @close="closeConfirmationModal"
       @delete-item="deleteSurvey"
-      :idItem="deleteSurveysId"
+      :idItem="deleteSurveyId"
     ></ConfirmationModal>
   </div>
 </template>
@@ -114,7 +114,7 @@ export default {
       isModalVisible: false,
       filterSurveysInput: "",
       isConfirmationModalVisible: false,
-      deleteSurveysId: {},
+      deleteSurveyId: {},
     };
   },
   apollo: {
@@ -133,26 +133,11 @@ export default {
         }
       `,
     },
-    surveysByDocument: {
-      query: gql`
-        query surveysByDocument($documentNumber: Int!) {
-          surveysByDocument(document: $document) {
-            id
-            document
-            question_one
-            question_two
-            question_three
-            question_four
-            question_five
-          }
-        }
-      `,
-    },
   },
   methods: {
-    openEditModal(surveyId) {
+    openEditModal(deleteSurveyByIdId) {
       this.isModalVisible = true;
-      this.editSurveys = this.getAllSurveys[surveyId];
+      this.editSurveys = this.getAllSurveys[deleteSurveyByIdId];
     },
     closeModal() {
       this.isModalVisible = false;
@@ -161,25 +146,26 @@ export default {
     closeConfirmationModal() {
       this.isConfirmationModalVisible = false;
     },
-    openConfirmationModal(surveyId) {
+    openConfirmationModal(deleteSurveyByIdId) {
       this.isConfirmationModalVisible = true;
-      this.deleteSurveysId = surveyId;
+      this.deleteSurveyId = deleteSurveyByIdId;
     },
 
-    deleteSurveysId: async function () {
+    deleteSurvey: async function () {
       await this.$apollo
         .mutate({
           mutation: gql`
-            mutation DeleteSurveyById($deleteSurveyByIdId: ID!) {
+            mutation ($deleteSurveyByIdId: ID!) {
               deleteSurveyById(id: $deleteSurveyByIdId)
             }
           `,
           variables: {
-            deleteSurveyByIdId: this.surveyId,
+            deleteSurveyByIdId: this.deleteSurveyId,
           },
         })
         .then((res) => {
           alert("Se eliminó encuesta");
+          this.$apollo.queries.getAllSurveys.refetch();
           console.log(res);
         })
         .catch((err) => {
@@ -189,37 +175,6 @@ export default {
     },
   },
 
-  filterSurveysInput: async function () {
-    await this.$apollo
-      .mutate({
-        mutation: gql`
-          query SurveysByDocument($document: Int!) {
-            surveysByDocument(document: $document) {
-              id
-              document
-              question_one
-              question_two
-              question_three
-              question_four
-              question_five
-            }
-          }
-        `,
-        variables: {
-          surveysByDocument: this.surveyDocument,
-        },
-      })
-      .then((res) => {
-        alert("Se filtró exitosamente");
-        console.log(res);
-      })
-      .catch((err) => {
-        alert("Hubo un error");
-        console.log(err);
-      });
-  },
-  created: function () {
-    this.$apollo.queries.surveysByDocument.refetch();
-  },
+
 };
 </script>

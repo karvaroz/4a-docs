@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="form-title">Afiliados</h1>
-    <form action="" class="search-form">
+    <form class="search-form">
       <div class="flex">
         <div class="input-container input-container--search">
           <label for="search" class="input-container__label">Buscar</label>
@@ -11,7 +11,7 @@
             name="search"
             id="search"
             required
-            v-model="filterAffiliatesInput"
+            v-model="document_number"
           />
           <small>Buscar por documento</small>
         </div>
@@ -65,7 +65,7 @@
               <button
                 type="button"
                 class="close-btn"
-                @click="openConfirmationModal(index)"
+                @click="openConfirmationModal(affiliate.id)"
               >
                 <ges-icon size="lg" icon="trash-alt"></ges-icon>
               </button>
@@ -138,25 +138,6 @@ export default {
         }
       `,
     },
-    affiliatesByDocument_number: {
-      query: gql`
-        query AffiliatesByDocument_number($documentNumber: String!) {
-          affiliatesByDocument_number(document_number: $documentNumber) {
-            id
-            name
-            lastname
-            document
-            document_number
-            email
-            phone
-            city
-            address
-            created
-            updated
-          }
-        }
-      `,
-    },
   },
   methods: {
     openEditModal(affiliateId) {
@@ -184,11 +165,12 @@ export default {
             }
           `,
           variables: {
-            affiliateId: this.affiliateId,
+            affiliateId: this.deleteAffiliateId,
           },
         })
         .then((res) => {
           alert("Se eliminó el afiliado");
+          this.$apollo.queries.allAffiliates.refetch();
           console.log(res);
         })
         .catch((err) => {
@@ -197,41 +179,8 @@ export default {
         });
     },
 
-    filterAffiliatesInput: async function () {
-      await this.$apollo
-        .mutate({
-          mutation: gql`
-            query AffiliatesByDocument_number($documentNumber: String!) {
-              affiliatesByDocument_number(document_number: $documentNumber) {
-                id
-                name
-                lastname
-                document
-                document_number
-                email
-                phone
-                city
-                address
-              }
-            }
-          `,
-          variables: {
-            documentNumber: this.document_number,
-          },
-        })
-        .then((res) => {
-          alert("Se filtró exitosamente");
-          console.log(res);
-        })
-        .catch((err) => {
-          alert("Hubo un error");
-          console.log(err);
-        });
-    },
+
   },
 
-  created: function () {
-    this.$apollo.queries.affiliatesByDocument_number.refetch();
-  },
 };
 </script>
