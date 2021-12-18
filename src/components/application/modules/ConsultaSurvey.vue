@@ -11,16 +11,11 @@
             name="search"
             id="search"
             required
-            v-model="filterSurveysInput"
+            v-model="search"
+            v-on:keyup.enter="filteredSurvey"
           />
           <small>Buscar por documento</small>
         </div>
-        <button
-          v-on:click="filterSurveys"
-          class="primary-btn primary-btn--search"
-        >
-          Filtrar
-        </button>
       </div>
     </form>
   </div>
@@ -41,7 +36,7 @@
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(survey, index) in getAllSurveys" :key="index">
+          <tr v-for="(survey, index) in filteredSurvey" :key="index">
             <td class="table__body-item">{{ survey.id }}</td>
             <td class="table__body-item">{{ survey.document }}</td>
             <td class="table__body-item">
@@ -112,7 +107,7 @@ export default {
       },
       editSurveys: {},
       isModalVisible: false,
-      filterSurveysInput: "",
+      search: "",
       isConfirmationModalVisible: false,
       deleteSurveyId: {},
     };
@@ -134,6 +129,7 @@ export default {
       `,
     },
   },
+
   methods: {
     openEditModal(deleteSurveyByIdId) {
       this.isModalVisible = true;
@@ -141,7 +137,6 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-      this.getAllSurveys();
     },
     closeConfirmationModal() {
       this.isConfirmationModalVisible = false;
@@ -174,6 +169,20 @@ export default {
         });
     },
   },
+
+  computed: {
+    filteredSurvey() {
+      if (this.search) {
+        return this.getAllSurveys.filter(item => {
+          return this.filteredSurvey
+
+        });
+      } else {
+      alert("Búsqueda sin resultados")
+        return this.getAllSurveys;
+      }
+    }
+  }
 
 
 };

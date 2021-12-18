@@ -11,16 +11,10 @@
             name="search"
             id="search"
             required
-            v-model="document_number"
+            v-model="search"
           />
           <small>Buscar por documento</small>
         </div>
-        <button
-          v-on:click="filterAffiliates"
-          class="primary-btn primary-btn--search"
-        >
-          Filtrar
-        </button>
       </div>
     </form>
   </div>
@@ -44,7 +38,7 @@
           </tr>
         </thead>
         <tbody class="table__body">
-          <tr v-for="(affiliate, index) in allAffiliates" :key="index">
+          <tr v-for="(affiliate, index) in filteredAffiliates" :key="index">
             <td class="table__body-item">{{ affiliate.id }}</td>
             <td class="table__body-item">{{ affiliate.name }}</td>
             <td class="table__body-item">{{ affiliate.lastname }}</td>
@@ -115,7 +109,7 @@ export default {
       affiliates: [],
       editAffiliate: {},
       isModalVisible: false,
-      filterAffiliatesInput: "",
+      search: "",
       isConfirmationModalVisible: false,
       deleteAffiliateId: {},
     };
@@ -181,6 +175,19 @@ export default {
 
 
   },
+    computed: {
+    filteredAffiliates() {
+      if (this.search) {
+        return this.allAffiliates.filter(item => {
+          return this.filteredAffiliates
+
+        });
+      } else {
+      alert("Búsqueda sin resultados")
+        return this.allAffiliates;
+      }
+    }
+  }
 
 };
 </script>
